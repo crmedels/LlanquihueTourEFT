@@ -125,4 +125,69 @@ public class Validador {
                 .replace(" ", "")
                 .toUpperCase();
     }
+
+    /**
+     * Verifica que un correo electronico tenga un formato valido.
+     *
+     * @param correo correo que se desea validar
+     * @throws DatoInvalidoException si el correo no tiene un formato valido
+     */
+    public static void validarCorreo(String correo)
+            throws DatoInvalidoException {
+
+        validarTextoObligatorio(correo, "El correo");
+
+        String formatoCorreo =
+                "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+        if (!correo.trim().matches(formatoCorreo)) {
+            throw new DatoInvalidoException(
+                    "El correo electronico no tiene un formato valido."
+            );
+        }
+    }
+
+    /**
+     * Verifica que un telefono contenga entre ocho y nueve digitos.
+     *
+     * @param telefono telefono que se desea validar
+     * @throws DatoInvalidoException si el telefono no es valido
+     */
+    public static void validarTelefono(String telefono)
+            throws DatoInvalidoException {
+
+        validarTextoObligatorio(telefono, "El telefono");
+
+        String telefonoLimpio = telefono
+                .replace(" ", "")
+                .replace("-", "")
+                .replace("(", "")
+                .replace(")", "");
+
+        if (!telefonoLimpio.matches("\\d{8,9}")) {
+            throw new DatoInvalidoException(
+                    "El telefono debe contener entre ocho y nueve digitos."
+            );
+        }
+    }
+
+    /**
+     * Retorna un telefono sin espacios, guiones ni parentesis.
+     *
+     * @param telefono telefono que se desea normalizar
+     * @return telefono normalizado
+     * @throws DatoInvalidoException si el telefono no es valido
+     */
+    public static String normalizarTelefono(String telefono)
+            throws DatoInvalidoException {
+
+        validarTelefono(telefono);
+
+        return telefono
+                .replace(" ", "")
+                .replace("-", "")
+                .replace("(", "")
+                .replace(")", "");
+    }
+
 }
