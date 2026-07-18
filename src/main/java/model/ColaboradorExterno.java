@@ -2,6 +2,7 @@ package model;
 
 import exception.DatoInvalidoException;
 import util.Validador;
+import interfaces.Registrable;
 
 /**
  * Representa a una persona externa que presta servicios
@@ -9,7 +10,8 @@ import util.Validador;
  *
  * @author Cristofer Medel
  */
-public class ColaboradorExterno extends Persona {
+public class ColaboradorExterno extends Persona
+        implements Registrable {
 
     private String codigoColaborador;
     private String tipoServicio;
@@ -186,10 +188,21 @@ public class ColaboradorExterno extends Persona {
     }
 
     /**
+     * Retorna el identificador unico del colaborador.
+     *
+     * @return codigo del colaborador
+     */
+    @Override
+    public String obtenerIdentificador() {
+        return codigoColaborador;
+    }
+
+    /**
      * Retorna un resumen breve del colaborador.
      *
      * @return resumen del colaborador
      */
+    @Override
     public String mostrarResumen() {
         String estado = disponible
                 ? "Disponible"

@@ -2,6 +2,7 @@ package model;
 
 import exception.DatoInvalidoException;
 import util.Validador;
+import interfaces.Registrable;
 
 /**
  * Representa a un guia turistico que presta servicios
@@ -9,7 +10,7 @@ import util.Validador;
  *
  * @author Cristofer Medel
  */
-public class GuiaTuristico extends Persona {
+public class GuiaTuristico extends Persona implements Registrable {
 
     private String codigoGuia;
     private String especialidad;
@@ -216,10 +217,21 @@ public class GuiaTuristico extends Persona {
     }
 
     /**
+     * Retorna el identificador unico del guia.
+     *
+     * @return codigo del guia
+     */
+    @Override
+    public String obtenerIdentificador() {
+        return codigoGuia;
+    }
+
+    /**
      * Retorna un resumen breve del guia.
      *
      * @return resumen del guia
      */
+    @Override
     public String mostrarResumen() {
         String estado = disponible
                 ? "Disponible"

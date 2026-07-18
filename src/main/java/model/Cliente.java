@@ -2,6 +2,7 @@ package model;
 
 import exception.DatoInvalidoException;
 import util.Validador;
+import interfaces.Registrable;
 
 /**
  * Representa a un cliente que contrata servicios
@@ -9,7 +10,7 @@ import util.Validador;
  *
  * @author Cristofer Medel
  */
-public class Cliente extends Persona {
+public class Cliente extends Persona implements Registrable {
 
     private String codigoCliente;
     private String preferenciaTuristica;
@@ -118,10 +119,21 @@ public class Cliente extends Persona {
     }
 
     /**
+     * Retorna el identificador unico del cliente.
+     *
+     * @return codigo del cliente
+     */
+    @Override
+    public String obtenerIdentificador() {
+        return codigoCliente;
+    }
+
+    /**
      * Retorna un resumen breve del cliente.
      *
      * @return resumen del cliente
      */
+    @Override
     public String mostrarResumen() {
         return codigoCliente
                 + " | " + getNombreCompleto()
