@@ -64,11 +64,10 @@ public class Direccion {
      * @throws DatoInvalidoException si el numero no es positivo
      */
     public void setNumero(int numero) throws DatoInvalidoException {
-        if (numero <= 0) {
-            throw new DatoInvalidoException(
-                    "El numero de la direccion debe ser mayor que cero."
-            );
-        }
+        Validador.validarEnteroPositivo(
+                numero,
+                "El numero de la direccion"
+        );
 
         this.numero = numero;
     }

@@ -190,4 +190,61 @@ public class Validador {
                 .replace(")", "");
     }
 
+    /**
+     * Verifica que un numero entero sea mayor que cero.
+     *
+     * @param valor numero que se desea validar
+     * @param nombreCampo nombre del campo validado
+     * @throws DatoInvalidoException si el valor no es positivo
+     */
+    public static void validarEnteroPositivo(
+            int valor,
+            String nombreCampo
+    ) throws DatoInvalidoException {
+
+        if (valor <= 0) {
+            throw new DatoInvalidoException(
+                    nombreCampo + " debe ser mayor que cero."
+            );
+        }
+    }
+
+    /**
+     * Verifica que un numero entero no sea negativo.
+     *
+     * @param valor numero que se desea validar
+     * @param nombreCampo nombre del campo validado
+     * @throws DatoInvalidoException si el valor es negativo
+     */
+    public static void validarEnteroNoNegativo(
+            int valor,
+            String nombreCampo
+    ) throws DatoInvalidoException {
+
+        if (valor < 0) {
+            throw new DatoInvalidoException(
+                    nombreCampo + " no puede ser negativo."
+            );
+        }
+    }
+
+    /**
+     * Verifica que un numero decimal sea mayor que cero.
+     *
+     * @param valor numero que se desea validar
+     * @param nombreCampo nombre del campo validado
+     * @throws DatoInvalidoException si el valor no es positivo
+     */
+    public static void validarDecimalPositivo(
+            double valor,
+            String nombreCampo
+    ) throws DatoInvalidoException {
+
+        if (valor <= 0) {
+            throw new DatoInvalidoException(
+                    nombreCampo + " debe ser mayor que cero."
+            );
+        }
+    }
+
 }
