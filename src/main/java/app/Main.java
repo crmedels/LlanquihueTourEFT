@@ -17,6 +17,7 @@ import exception.CupoInsuficienteException;
 import model.Reserva;
 import service.GestorReservas;
 import data.LectorClientes;
+import data.LectorGuias;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -40,6 +41,7 @@ public class Main {
             probarGestorServicios();
             probarGestorReservas();
             probarCargaClientes();
+            probarCargaGuias();
 
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException
@@ -603,6 +605,78 @@ public class Main {
                     "No se encontro el cliente CLI-202."
             );
         }
+    }
+
+    /**
+     * Prueba la lectura de guias desde un archivo TXT
+     * y su integracion con el gestor de entidades.
+     *
+     * @throws IOException si el archivo no puede ser leido
+     * @throws DatoInvalidoException si algun dato no es valido
+     * @throws RegistroDuplicadoException si existe un codigo repetido
+     */
+    private static void probarCargaGuias()
+            throws IOException,
+            DatoInvalidoException,
+            RegistroDuplicadoException {
+
+        LectorGuias lectorGuias =
+                new LectorGuias();
+
+        ArrayList<GuiaTuristico> guiasCargados =
+                lectorGuias.cargarGuias(
+                        "data/guias.txt"
+                );
+
+        GestorEntidades gestorEntidades =
+                new GestorEntidades();
+
+        for (GuiaTuristico guia : guiasCargados) {
+            gestorEntidades.registrarEntidad(guia);
+        }
+
+        System.out.println(
+                "\n=== GUIAS CARGADOS DESDE TXT ==="
+        );
+
+        System.out.println(
+                gestorEntidades.generarResumenEntidades()
+        );
+
+        System.out.println(
+                "Guias cargados correctamente: "
+                        + guiasCargados.size()
+        );
+
+        System.out.println(
+                "\n=== BUSQUEDA DE GUIA CARGADO ==="
+        );
+
+        Registrable guiaEncontrado =
+                gestorEntidades.buscarPorIdentificador(
+                        "GUI-202"
+                );
+
+        if (guiaEncontrado != null) {
+            System.out.println(
+                    guiaEncontrado.mostrarResumen()
+            );
+        } else {
+            System.out.println(
+                    "No se encontro el guia GUI-202."
+            );
+        }
+
+        System.out.println(
+                "\n=== FILTRO DE GUIAS CARGADOS ==="
+        );
+
+        System.out.println(
+                "Guias encontrados mediante filtro: "
+                        + gestorEntidades
+                        .filtrarPorTipo("guia")
+                        .size()
+        );
     }
 
 }
