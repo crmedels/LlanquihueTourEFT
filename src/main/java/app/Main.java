@@ -13,6 +13,9 @@ import model.ServicioTuristico;
 import model.Vehiculo;
 import service.GestorEntidades;
 import service.GestorServicios;
+import exception.CupoInsuficienteException;
+import model.Reserva;
+import service.GestorReservas;
 
 /**
  * Punto de entrada principal del sistema Llanquihue Tour.
@@ -32,9 +35,11 @@ public class Main {
         try {
             probarGestorEntidades();
             probarGestorServicios();
+            probarGestorReservas();
 
         } catch (DatoInvalidoException
-                 | RegistroDuplicadoException e) {
+                 | RegistroDuplicadoException
+                 | CupoInsuficienteException e) {
 
             System.out.println(
                     "No fue posible ejecutar la prueba: "
@@ -323,4 +328,215 @@ public class Main {
             );
         }
     }
+
+    /**
+     * Prueba el registro, busqueda, calculo de ingresos
+     * y control de cupos de las reservas.
+     *
+     * @throws DatoInvalidoException si algun dato no es valido
+     * @throws RegistroDuplicadoException si existe un codigo repetido
+     * @throws CupoInsuficienteException si no existen cupos suficientes
+     */
+    private static void probarGestorReservas()
+            throws DatoInvalidoException,
+            RegistroDuplicadoException,
+            CupoInsuficienteException {
+
+        GestorReservas gestorReservas =
+                new GestorReservas();
+
+        Cliente cliente = new Cliente(
+                "12.345.678-5",
+                "Camila",
+                "Soto",
+                "912345678",
+                "camila.soto@gmail.com",
+                new Direccion(
+                        "Los Alerces",
+                        125,
+                        "Llanquihue",
+                        "Puerto Montt"
+                ),
+                "CLI-101",
+                "Paseos lacustres"
+        );
+
+        GuiaTuristico guiaUno = new GuiaTuristico(
+                "11.111.111-1",
+                "Matias",
+                "Vargas",
+                "923456789",
+                "matias.vargas@gmail.com",
+                new Direccion(
+                        "Vicente Perez Rosales",
+                        430,
+                        "Puerto Varas",
+                        "Puerto Varas"
+                ),
+                "GUI-101",
+                "Turismo lacustre",
+                8,
+                60000,
+                true
+        );
+
+        GuiaTuristico guiaDos = new GuiaTuristico(
+                "22.222.222-2",
+                "Valentina",
+                "Munoz",
+                "934567891",
+                "valentina.munoz@gmail.com",
+                new Direccion(
+                        "Bernardo O Higgins",
+                        850,
+                        "Frutillar",
+                        "Frutillar"
+                ),
+                "GUI-102",
+                "Turismo regional",
+                5,
+                55000,
+                true
+        );
+
+        Vehiculo vehiculoUno = new Vehiculo(
+                "ABCD12",
+                "Mercedes-Benz",
+                "Sprinter",
+                "Minibus",
+                15,
+                true
+        );
+
+        Vehiculo vehiculoDos = new Vehiculo(
+                "EFGH34",
+                "Hyundai",
+                "County",
+                "Minibus",
+                12,
+                true
+        );
+
+        PaseoLacustre paseo = new PaseoLacustre(
+                "SER-101",
+                "Navegacion por el lago",
+                "Paseo turistico por el lago Llanquihue",
+                20000,
+                3,
+                10,
+                true,
+                "Lago Sur",
+                "Lago Llanquihue",
+                10000,
+                true
+        );
+
+        Reserva reservaUno = new Reserva(
+                "RES-101",
+                cliente,
+                paseo,
+                guiaUno,
+                vehiculoUno,
+                "25-07-2026",
+                6
+        );
+
+        Reserva reservaDos = new Reserva(
+                "RES-102",
+                cliente,
+                paseo,
+                guiaDos,
+                vehiculoDos,
+                "25-07-2026",
+                4
+        );
+
+        gestorReservas.registrarReserva(reservaUno);
+        gestorReservas.registrarReserva(reservaDos);
+
+        System.out.println(
+                "\n=== RESERVAS REGISTRADAS ==="
+        );
+
+        System.out.println(
+                gestorReservas.generarResumenReservas()
+        );
+
+        System.out.println(
+                "Cantidad total de reservas: "
+                        + gestorReservas.obtenerCantidadReservas()
+        );
+
+        System.out.println(
+                "Personas reservadas para SER-101: "
+                        + gestorReservas
+                        .calcularPersonasReservadas(
+                                "SER-101",
+                                "25-07-2026"
+                        )
+        );
+
+        System.out.println(
+                "Ingresos totales: $"
+                        + gestorReservas.calcularIngresosTotales()
+        );
+
+        System.out.println(
+                "\n=== BUSQUEDA DE RESERVA ==="
+        );
+
+        Reserva reservaEncontrada =
+                gestorReservas.buscarPorCodigo("RES-102");
+
+        if (reservaEncontrada != null) {
+            System.out.println(
+                    reservaEncontrada.mostrarResumen()
+            );
+        } else {
+            System.out.println("Reserva no encontrada.");
+        }
+
+        System.out.println(
+                "\n=== PRUEBA DE SOBREVENTA ==="
+        );
+
+        Reserva reservaSinCupo = new Reserva(
+                "RES-103",
+                cliente,
+                paseo,
+                guiaUno,
+                vehiculoUno,
+                "25-07-2026",
+                1
+        );
+
+        try {
+            gestorReservas.registrarReserva(
+                    reservaSinCupo
+            );
+
+        } catch (CupoInsuficienteException e) {
+            System.out.println(
+                    "Sobreventa evitada correctamente: "
+                            + e.getMessage()
+            );
+        }
+
+        System.out.println(
+                "\n=== PRUEBA DE RESERVA DUPLICADA ==="
+        );
+
+        try {
+            gestorReservas.registrarReserva(
+                    reservaUno
+            );
+
+        } catch (RegistroDuplicadoException e) {
+            System.out.println(
+                    "Duplicado detectado correctamente: "
+                            + e.getMessage()
+            );
+        }
+    }
+
 }
