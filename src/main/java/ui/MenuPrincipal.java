@@ -5,6 +5,7 @@ import exception.DatoInvalidoException;
 import exception.RegistroDuplicadoException;
 import interfaces.Registrable;
 import model.Cliente;
+import model.ColaboradorExterno;
 import model.Direccion;
 import model.GuiaTuristico;
 import model.Persona;
@@ -147,6 +148,7 @@ public class MenuPrincipal {
                 "Registrar cliente",
                 "Registrar guia turistico",
                 "Registrar vehiculo",
+                "Registrar colaborador externo",
                 "Listar todas",
                 "Buscar por identificador",
                 "Buscar persona por RUT",
@@ -185,22 +187,26 @@ public class MenuPrincipal {
                     break;
 
                 case 3:
-                    mostrarTodasLasEntidades();
+                    registrarColaboradorExterno();
                     break;
 
                 case 4:
-                    buscarEntidadPorIdentificador();
+                    mostrarTodasLasEntidades();
                     break;
 
                 case 5:
-                    buscarPersonaPorRut();
+                    buscarEntidadPorIdentificador();
                     break;
 
                 case 6:
-                    filtrarEntidadesPorTipo();
+                    buscarPersonaPorRut();
                     break;
 
                 case 7:
+                    filtrarEntidadesPorTipo();
+                    break;
+
+                case 8:
                 case JOptionPane.CLOSED_OPTION:
                     continuar = false;
                     break;
@@ -704,6 +710,199 @@ public class MenuPrincipal {
                     null,
                     "Vehiculo registrado correctamente.\n\n"
                             + vehiculo.mostrarResumen(),
+                    "Registro exitoso",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (DatoInvalidoException
+                 | RegistroDuplicadoException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Solicita los datos necesarios y registra
+     * un nuevo colaborador externo en el sistema.
+     */
+    private void registrarColaboradorExterno() {
+
+        String titulo = "Registrar colaborador externo";
+
+        String codigo =
+                solicitarDato(
+                        "Ingrese el codigo del colaborador:",
+                        titulo
+                );
+
+        if (codigo == null) {
+            return;
+        }
+
+        String rut =
+                solicitarDato(
+                        "Ingrese el RUT:",
+                        titulo
+                );
+
+        if (rut == null) {
+            return;
+        }
+
+        String nombre =
+                solicitarDato(
+                        "Ingrese el nombre:",
+                        titulo
+                );
+
+        if (nombre == null) {
+            return;
+        }
+
+        String apellido =
+                solicitarDato(
+                        "Ingrese el apellido:",
+                        titulo
+                );
+
+        if (apellido == null) {
+            return;
+        }
+
+        String telefono =
+                solicitarDato(
+                        "Ingrese el telefono:",
+                        titulo
+                );
+
+        if (telefono == null) {
+            return;
+        }
+
+        String correo =
+                solicitarDato(
+                        "Ingrese el correo electronico:",
+                        titulo
+                );
+
+        if (correo == null) {
+            return;
+        }
+
+        String calle =
+                solicitarDato(
+                        "Ingrese la calle:",
+                        titulo
+                );
+
+        if (calle == null) {
+            return;
+        }
+
+        String numeroTexto =
+                solicitarDato(
+                        "Ingrese el numero de la direccion:",
+                        titulo
+                );
+
+        if (numeroTexto == null) {
+            return;
+        }
+
+        String comuna =
+                solicitarDato(
+                        "Ingrese la comuna:",
+                        titulo
+                );
+
+        if (comuna == null) {
+            return;
+        }
+
+        String ciudad =
+                solicitarDato(
+                        "Ingrese la ciudad:",
+                        titulo
+                );
+
+        if (ciudad == null) {
+            return;
+        }
+
+        String tipoServicio =
+                solicitarDato(
+                        "Ingrese el tipo de servicio:",
+                        titulo
+                );
+
+        if (tipoServicio == null) {
+            return;
+        }
+
+        String tarifaTexto =
+                solicitarDato(
+                        "Ingrese la tarifa por servicio:",
+                        titulo
+                );
+
+        if (tarifaTexto == null) {
+            return;
+        }
+
+        Boolean disponible =
+                solicitarDisponibilidad(
+                        titulo
+                );
+
+        if (disponible == null) {
+            return;
+        }
+
+        try {
+            int numeroDireccion =
+                    Validador.convertirEntero(
+                            numeroTexto,
+                            "El numero de la direccion"
+                    );
+
+            double tarifaPorServicio =
+                    Validador.convertirDecimal(
+                            tarifaTexto,
+                            "La tarifa por servicio"
+                    );
+
+            Direccion direccion =
+                    new Direccion(
+                            calle,
+                            numeroDireccion,
+                            comuna,
+                            ciudad
+                    );
+
+            ColaboradorExterno colaborador =
+                    new ColaboradorExterno(
+                            rut,
+                            nombre,
+                            apellido,
+                            telefono,
+                            correo,
+                            direccion,
+                            codigo,
+                            tipoServicio,
+                            tarifaPorServicio,
+                            disponible
+                    );
+
+            gestorEntidades.registrarEntidad(
+                    colaborador
+            );
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Colaborador externo registrado correctamente.\n\n"
+                            + colaborador.mostrarResumen(),
                     "Registro exitoso",
                     JOptionPane.INFORMATION_MESSAGE
             );
