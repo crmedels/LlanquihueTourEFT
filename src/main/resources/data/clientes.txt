@@ -1,0 +1,4 @@
+# codigoCliente;rut;nombre;apellido;telefono;correo;calle;numero;comuna;ciudad;preferenciaTuristica
+CLI-201;17.654.321-3;Daniela;Rojas;912345670;daniela.rojas@gmail.com;Los Notros;145;Llanquihue;Llanquihue;Turismo gastronomico
+CLI-202;15.432.789-4;Felipe;Munoz;923456780;felipe.munoz@gmail.com;San Martin;320;Puerto Varas;Puerto Varas;Paseos lacustres
+CLI-203;19.876.543-0;Carolina;Perez;934567890;carolina.perez@gmail.com;Arturo Prat;518;Frutillar;Frutillar;Rutas culturales
