@@ -1,6 +1,7 @@
 package ui;
 
 import data.CargadorDatosIniciales;
+import exception.CupoInsuficienteException;
 import exception.DatoInvalidoException;
 import exception.RegistroDuplicadoException;
 import interfaces.Registrable;
@@ -10,6 +11,7 @@ import model.Direccion;
 import model.GuiaTuristico;
 import model.PaseoLacustre;
 import model.Persona;
+import model.Reserva;
 import model.RutaGastronomica;
 import model.ServicioTuristico;
 import model.Vehiculo;
@@ -42,7 +44,7 @@ public class MenuPrincipal {
     private final GestorReservas gestorReservas;
 
     /**
-     * Crea el menu principal y los gestores del sistema.
+     * Crea el menu principal y los gestores.
      */
     public MenuPrincipal() {
         gestorEntidades = new GestorEntidades();
@@ -116,9 +118,7 @@ public class MenuPrincipal {
                     break;
 
                 case 3:
-                    mostrarModuloPendiente(
-                            "Gestion de reservas"
-                    );
+                    mostrarMenuReservas();
                     break;
 
                 case 4:
@@ -272,7 +272,76 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra un resumen de los datos del sistema.
+     * Muestra el menu de reservas.
+     */
+    private void mostrarMenuReservas() {
+
+        String[] opciones = {
+                "Registrar reserva",
+                "Ver datos disponibles",
+                "Listar todas",
+                "Buscar por codigo",
+                "Buscar por RUT del cliente",
+                "Buscar por fecha",
+                "Ver ingresos totales",
+                "Volver"
+        };
+
+        boolean continuar = true;
+
+        while (continuar) {
+
+            int opcion =
+                    mostrarMenuVertical(
+                            "Gestion de reservas",
+                            "Seleccione una opcion:",
+                            opciones
+                    );
+
+            switch (opcion) {
+
+                case 0:
+                    registrarReserva();
+                    break;
+
+                case 1:
+                    mostrarDatosDisponiblesReserva();
+                    break;
+
+                case 2:
+                    mostrarTodasLasReservas();
+                    break;
+
+                case 3:
+                    buscarReservaPorCodigo();
+                    break;
+
+                case 4:
+                    buscarReservasPorRut();
+                    break;
+
+                case 5:
+                    buscarReservasPorFecha();
+                    break;
+
+                case 6:
+                    mostrarIngresosTotales();
+                    break;
+
+                case 7:
+                case JOptionPane.CLOSED_OPTION:
+                    continuar = false;
+                    break;
+
+                default:
+                    continuar = false;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Muestra un resumen general del sistema.
      */
     private void mostrarResumenGeneral() {
 
@@ -282,7 +351,12 @@ public class MenuPrincipal {
                         + "\n\n=== SERVICIOS TURISTICOS ===\n"
                         + gestorServicios.generarResumenServicios()
                         + "\n\n=== RESERVAS ===\n"
-                        + gestorReservas.generarResumenReservas();
+                        + gestorReservas.generarResumenReservas()
+                        + "\n\n=== INGRESOS ===\n"
+                        + "Total: $"
+                        + obtenerMontoSinDecimales(
+                        gestorReservas.calcularIngresosTotales()
+                );
 
         mostrarMensaje(
                 "Resumen general",
@@ -620,7 +694,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Registra una ruta gastronomica desde la interfaz.
+     * Registra una ruta gastronomica.
      */
     private void registrarRutaGastronomica() {
 
@@ -718,7 +792,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Registra un paseo lacustre desde la interfaz.
+     * Registra un paseo lacustre.
      */
     private void registrarPaseoLacustre() {
 
@@ -821,6 +895,141 @@ public class MenuPrincipal {
     }
 
     /**
+     * Registra una reserva.
+     */
+    private void registrarReserva() {
+
+        String titulo = "Registrar reserva";
+
+        String[] datos =
+                solicitarDatos(
+                        titulo,
+                        "Ingrese el codigo de la reserva:",
+                        "Ingrese el codigo del cliente:",
+                        "Ingrese el codigo del servicio:",
+                        "Ingrese el codigo del guia:",
+                        "Ingrese la patente del vehiculo:",
+                        "Ingrese la fecha en formato DD-MM-AAAA:",
+                        "Ingrese la cantidad de personas:"
+                );
+
+        if (datos == null) {
+            return;
+        }
+
+        try {
+            Registrable entidadCliente =
+                    gestorEntidades.buscarPorIdentificador(
+                            datos[1]
+                    );
+
+            if (!(entidadCliente instanceof Cliente)) {
+                throw new DatoInvalidoException(
+                        "No existe un cliente con el codigo "
+                                + datos[1] + "."
+                );
+            }
+
+            ServicioTuristico servicio =
+                    gestorServicios.buscarPorCodigo(
+                            datos[2]
+                    );
+
+            if (servicio == null) {
+                throw new DatoInvalidoException(
+                        "No existe un servicio con el codigo "
+                                + datos[2] + "."
+                );
+            }
+
+            Registrable entidadGuia =
+                    gestorEntidades.buscarPorIdentificador(
+                            datos[3]
+                    );
+
+            if (!(entidadGuia instanceof GuiaTuristico)) {
+                throw new DatoInvalidoException(
+                        "No existe un guia con el codigo "
+                                + datos[3] + "."
+                );
+            }
+
+            Registrable entidadVehiculo =
+                    gestorEntidades.buscarPorIdentificador(
+                            datos[4]
+                    );
+
+            if (!(entidadVehiculo instanceof Vehiculo)) {
+                throw new DatoInvalidoException(
+                        "No existe un vehiculo con la patente "
+                                + datos[4] + "."
+                );
+            }
+
+            int cantidadPersonas =
+                    Validador.convertirEntero(
+                            datos[6],
+                            "La cantidad de personas"
+                    );
+
+            Cliente cliente =
+                    (Cliente) entidadCliente;
+
+            GuiaTuristico guia =
+                    (GuiaTuristico) entidadGuia;
+
+            Vehiculo vehiculo =
+                    (Vehiculo) entidadVehiculo;
+
+            Reserva reserva =
+                    new Reserva(
+                            datos[0],
+                            cliente,
+                            servicio,
+                            guia,
+                            vehiculo,
+                            datos[5],
+                            cantidadPersonas
+                    );
+
+            gestorReservas.registrarReserva(
+                    reserva
+            );
+
+            mostrarMensaje(
+                    "Registro exitoso",
+                    "Reserva registrada correctamente.\n\n"
+                            + reserva.toString()
+            );
+
+        } catch (DatoInvalidoException
+                 | RegistroDuplicadoException
+                 | CupoInsuficienteException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Muestra los datos necesarios para registrar una reserva.
+     */
+    private void mostrarDatosDisponiblesReserva() {
+
+        String resumen =
+                "=== ENTIDADES ===\n"
+                        + gestorEntidades.generarResumenEntidades()
+                        + "\n\n=== SERVICIOS ===\n"
+                        + gestorServicios.generarResumenServicios();
+
+        mostrarMensaje(
+                "Datos disponibles para reservas",
+                resumen
+        );
+    }
+
+    /**
      * Muestra todas las entidades.
      */
     private void mostrarTodasLasEntidades() {
@@ -839,7 +1048,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Busca una entidad por codigo o patente.
+     * Busca una entidad por identificador.
      */
     private void buscarEntidadPorIdentificador() {
 
@@ -929,7 +1138,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Filtra las entidades por tipo.
+     * Filtra entidades por tipo.
      */
     private void filtrarEntidadesPorTipo() {
 
@@ -1001,7 +1210,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra una lista filtrada de entidades.
+     * Muestra entidades filtradas.
      */
     private void mostrarEntidadesFiltradas(
             List<Registrable> entidades,
@@ -1022,12 +1231,9 @@ public class MenuPrincipal {
                 new StringBuilder();
 
         for (Registrable entidad : entidades) {
-
             resumen.append(
                     entidad.mostrarResumen()
-            );
-
-            resumen.append("\n");
+            ).append("\n");
         }
 
         mostrarMensaje(
@@ -1037,7 +1243,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra todos los servicios turisticos.
+     * Muestra todos los servicios.
      */
     private void mostrarTodosLosServicios() {
 
@@ -1101,7 +1307,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Filtra servicios por su subclase.
+     * Filtra servicios por tipo.
      */
     private void filtrarServiciosPorTipo() {
 
@@ -1161,7 +1367,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra una lista filtrada de servicios.
+     * Muestra servicios filtrados.
      */
     private void mostrarServiciosFiltrados(
             List<ServicioTuristico> servicios,
@@ -1182,12 +1388,9 @@ public class MenuPrincipal {
                 new StringBuilder();
 
         for (ServicioTuristico servicio : servicios) {
-
             resumen.append(
                     servicio.mostrarResumen()
-            );
-
-            resumen.append("\n");
+            ).append("\n");
         }
 
         mostrarMensaje(
@@ -1197,8 +1400,197 @@ public class MenuPrincipal {
     }
 
     /**
-     * Solicita varios datos y detiene el proceso
-     * inmediatamente si el usuario cancela.
+     * Muestra todas las reservas.
+     */
+    private void mostrarTodasLasReservas() {
+
+        mostrarMensaje(
+                "Reservas registradas",
+                gestorReservas.generarResumenReservas()
+        );
+    }
+
+    /**
+     * Busca una reserva por codigo.
+     */
+    private void buscarReservaPorCodigo() {
+
+        String codigo =
+                solicitarDato(
+                        "Ingrese el codigo de la reserva:",
+                        "Buscar reserva"
+                );
+
+        if (codigo == null) {
+            return;
+        }
+
+        if (codigo.isEmpty()) {
+
+            mostrarError(
+                    "Debe ingresar el codigo de la reserva."
+            );
+
+            return;
+        }
+
+        Reserva reserva =
+                gestorReservas.buscarPorCodigo(
+                        codigo
+                );
+
+        if (reserva == null) {
+
+            mostrarMensaje(
+                    "Resultado de busqueda",
+                    "No se encontro una reserva con el codigo "
+                            + codigo + "."
+            );
+
+            return;
+        }
+
+        mostrarMensaje(
+                "Reserva encontrada",
+                reserva.toString()
+        );
+    }
+
+    /**
+     * Busca reservas por RUT del cliente.
+     */
+    private void buscarReservasPorRut() {
+
+        String rut =
+                solicitarDato(
+                        "Ingrese el RUT del cliente:",
+                        "Buscar reservas"
+                );
+
+        if (rut == null) {
+            return;
+        }
+
+        if (rut.isEmpty()) {
+
+            mostrarError(
+                    "Debe ingresar el RUT del cliente."
+            );
+
+            return;
+        }
+
+        List<Reserva> reservas =
+                gestorReservas.buscarPorRutCliente(
+                        rut
+                );
+
+        mostrarListaReservas(
+                reservas,
+                "Reservas del cliente"
+        );
+    }
+
+    /**
+     * Busca reservas por fecha.
+     */
+    private void buscarReservasPorFecha() {
+
+        String fecha =
+                solicitarDato(
+                        "Ingrese la fecha en formato DD-MM-AAAA:",
+                        "Buscar reservas"
+                );
+
+        if (fecha == null) {
+            return;
+        }
+
+        if (!fecha.matches("\\d{2}-\\d{2}-\\d{4}")) {
+
+            mostrarError(
+                    "La fecha debe tener el formato DD-MM-AAAA."
+            );
+
+            return;
+        }
+
+        List<Reserva> reservas =
+                gestorReservas.buscarPorFecha(
+                        fecha
+                );
+
+        mostrarListaReservas(
+                reservas,
+                "Reservas de la fecha " + fecha
+        );
+    }
+
+    /**
+     * Muestra una lista de reservas.
+     */
+    private void mostrarListaReservas(
+            List<Reserva> reservas,
+            String titulo
+    ) {
+
+        if (reservas.isEmpty()) {
+
+            mostrarMensaje(
+                    titulo,
+                    "No se encontraron reservas."
+            );
+
+            return;
+        }
+
+        StringBuilder resumen =
+                new StringBuilder();
+
+        for (Reserva reserva : reservas) {
+            resumen.append(
+                    reserva.mostrarResumen()
+            ).append("\n");
+        }
+
+        mostrarMensaje(
+                titulo,
+                resumen.toString()
+        );
+    }
+
+    /**
+     * Muestra los ingresos totales.
+     */
+    private void mostrarIngresosTotales() {
+
+        double ingresos =
+                gestorReservas.calcularIngresosTotales();
+
+        mostrarMensaje(
+                "Ingresos totales",
+                "Cantidad de reservas: "
+                        + gestorReservas.obtenerCantidadReservas()
+                        + "\nIngresos acumulados: $"
+                        + obtenerMontoSinDecimales(
+                        ingresos
+                )
+        );
+    }
+
+    /**
+     * Convierte un monto a texto sin decimales.
+     */
+    private String obtenerMontoSinDecimales(
+            double monto
+    ) {
+        return String.valueOf(
+                Math.round(monto)
+        );
+    }
+
+    /**
+     * Solicita varios datos.
      */
     private String[] solicitarDatos(
             String titulo,
@@ -1225,7 +1617,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Solicita un dato de texto.
+     * Solicita un dato.
      */
     private String solicitarDato(
             String mensaje,
@@ -1248,7 +1640,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Solicita la disponibilidad de un registro.
+     * Solicita disponibilidad.
      */
     private Boolean solicitarDisponibilidad(
             String titulo
@@ -1285,7 +1677,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Solicita una respuesta afirmativa o negativa.
+     * Solicita una confirmacion.
      */
     private Boolean solicitarConfirmacion(
             String titulo,
@@ -1323,7 +1715,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra un menu con los botones en forma vertical.
+     * Muestra un menu con botones verticales.
      */
     private int mostrarMenuVertical(
             String titulo,
@@ -1450,20 +1842,6 @@ public class MenuPrincipal {
                 mensaje,
                 titulo,
                 JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
-    /**
-     * Informa que un modulo aun no ha sido habilitado.
-     */
-    private void mostrarModuloPendiente(
-            String nombreModulo
-    ) {
-
-        mostrarMensaje(
-                "Llanquihue Tour",
-                nombreModulo
-                        + "\n\nEl modulo sera habilitado proximamente."
         );
     }
 
