@@ -8,6 +8,8 @@ import model.ColaboradorExterno;
 import model.GuiaTuristico;
 import model.Vehiculo;
 import java.util.ArrayList;
+import model.Persona;
+import util.Validador;
 
 /**
  * Gestiona las entidades registrables del sistema
@@ -47,6 +49,17 @@ public class GestorEntidades {
                     "Ya existe una entidad con el identificador "
                             + entidad.obtenerIdentificador() + "."
             );
+        }
+
+        if (entidad instanceof Persona) {
+            Persona persona = (Persona) entidad;
+
+            if (existeRut(persona.getRut())) {
+                throw new RegistroDuplicadoException(
+                        "Ya existe una persona registrada con el RUT "
+                                + persona.getRut() + "."
+                );
+            }
         }
 
         entidades.add(entidad);
@@ -192,4 +205,65 @@ public class GestorEntidades {
     public int obtenerCantidadEntidades() {
         return entidades.size();
     }
+
+    /**
+     * Comprueba si existe una persona registrada con el RUT indicado.
+     *
+     * @param rut RUT que se desea comprobar
+     * @return true si el RUT ya se encuentra registrado
+     * @throws DatoInvalidoException si el RUT no es valido
+     */
+    public boolean existeRut(
+            String rut
+    ) throws DatoInvalidoException {
+
+        String rutNormalizado =
+                Validador.normalizarRut(rut);
+
+        for (Registrable entidad : entidades) {
+
+            if (entidad instanceof Persona) {
+                Persona persona = (Persona) entidad;
+
+                if (persona.getRut().equalsIgnoreCase(
+                        rutNormalizado
+                )) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Busca una persona registrada mediante su RUT.
+     *
+     * @param rut RUT de la persona buscada
+     * @return persona encontrada o null si no existe
+     * @throws DatoInvalidoException si el RUT no es valido
+     */
+    public Persona buscarPersonaPorRut(
+            String rut
+    ) throws DatoInvalidoException {
+
+        String rutNormalizado =
+                Validador.normalizarRut(rut);
+
+        for (Registrable entidad : entidades) {
+
+            if (entidad instanceof Persona) {
+                Persona persona = (Persona) entidad;
+
+                if (persona.getRut().equalsIgnoreCase(
+                        rutNormalizado
+                )) {
+                    return persona;
+                }
+            }
+        }
+
+        return null;
+    }
+
 }
