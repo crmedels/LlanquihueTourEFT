@@ -18,6 +18,7 @@ import model.Reserva;
 import service.GestorReservas;
 import data.LectorClientes;
 import data.LectorGuias;
+import data.LectorServicios;
 import data.LectorVehiculos;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class Main {
             probarCargaClientes();
             probarCargaGuias();
             probarCargaVehiculos();
+            probarCargaServicios();
 
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException
@@ -750,6 +752,111 @@ public class Main {
                         + gestorEntidades
                         .filtrarPorTipo("vehiculo")
                         .size()
+        );
+    }
+
+    /**
+     * Prueba la lectura polimorfica de servicios desde un archivo TXT
+     * y su integracion con el gestor de servicios.
+     *
+     * @throws IOException si el archivo no puede ser leido
+     * @throws DatoInvalidoException si algun dato no es valido
+     * @throws RegistroDuplicadoException si existe un codigo repetido
+     */
+    private static void probarCargaServicios()
+            throws IOException,
+            DatoInvalidoException,
+            RegistroDuplicadoException {
+
+        LectorServicios lectorServicios =
+                new LectorServicios();
+
+        ArrayList<ServicioTuristico> serviciosCargados =
+                lectorServicios.cargarServicios(
+                        "data/servicios.txt"
+                );
+
+        GestorServicios gestorServicios =
+                new GestorServicios();
+
+        for (ServicioTuristico servicio : serviciosCargados) {
+            gestorServicios.registrarServicio(servicio);
+        }
+
+        System.out.println(
+                "\n=== SERVICIOS CARGADOS DESDE TXT ==="
+        );
+
+        System.out.println(
+                gestorServicios.generarResumenServicios()
+        );
+
+        System.out.println(
+                "Servicios cargados correctamente: "
+                        + serviciosCargados.size()
+        );
+
+        System.out.println(
+                "\n=== BUSQUEDA DE SERVICIO CARGADO ==="
+        );
+
+        ServicioTuristico servicioEncontrado =
+                gestorServicios.buscarPorCodigo(
+                        "SER-203"
+                );
+
+        if (servicioEncontrado != null) {
+            System.out.println(
+                    servicioEncontrado.mostrarResumen()
+            );
+        } else {
+            System.out.println(
+                    "No se encontro el servicio SER-203."
+            );
+        }
+
+        System.out.println(
+                "\n=== FILTRO DE SERVICIOS CARGADOS ==="
+        );
+
+        System.out.println(
+                "Rutas encontradas: "
+                        + gestorServicios
+                        .filtrarPorTipo("ruta")
+                        .size()
+        );
+
+        System.out.println(
+                "Paseos encontrados: "
+                        + gestorServicios
+                        .filtrarPorTipo("paseo")
+                        .size()
+        );
+
+        System.out.println(
+                "\n=== PRECIOS DE SERVICIOS CARGADOS ==="
+        );
+
+        double precioRuta =
+                gestorServicios.calcularPrecioServicio(
+                        "SER-201",
+                        2
+                );
+
+        double precioPaseo =
+                gestorServicios.calcularPrecioServicio(
+                        "SER-203",
+                        3
+                );
+
+        System.out.println(
+                "Precio de SER-201 para 2 personas: $"
+                        + precioRuta
+        );
+
+        System.out.println(
+                "Precio de SER-203 para 3 personas: $"
+                        + precioPaseo
         );
     }
 
