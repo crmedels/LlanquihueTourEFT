@@ -20,6 +20,7 @@ import data.LectorClientes;
 import data.LectorGuias;
 import data.LectorServicios;
 import data.LectorVehiculos;
+import data.CargadorDatosIniciales;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -46,6 +47,7 @@ public class Main {
             probarCargaGuias();
             probarCargaVehiculos();
             probarCargaServicios();
+            probarCargaCentralizada();
 
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException
@@ -857,6 +859,125 @@ public class Main {
         System.out.println(
                 "Precio de SER-203 para 3 personas: $"
                         + precioPaseo
+        );
+    }
+
+    /**
+     * Prueba la carga centralizada de entidades y servicios
+     * desde los archivos TXT del sistema.
+     *
+     * @throws IOException si algun archivo no puede ser leido
+     * @throws DatoInvalidoException si algun dato no es valido
+     * @throws RegistroDuplicadoException si existe un registro repetido
+     */
+    private static void probarCargaCentralizada()
+            throws IOException,
+            DatoInvalidoException,
+            RegistroDuplicadoException {
+
+        GestorEntidades gestorEntidades =
+                new GestorEntidades();
+
+        GestorServicios gestorServicios =
+                new GestorServicios();
+
+        CargadorDatosIniciales cargadorDatos =
+                new CargadorDatosIniciales();
+
+        cargadorDatos.cargarDatosIniciales(
+                gestorEntidades,
+                gestorServicios
+        );
+
+        int totalEntidades =
+                gestorEntidades
+                        .filtrarPorTipo("cliente")
+                        .size()
+                        + gestorEntidades
+                        .filtrarPorTipo("guia")
+                        .size()
+                        + gestorEntidades
+                        .filtrarPorTipo("colaborador")
+                        .size()
+                        + gestorEntidades
+                        .filtrarPorTipo("vehiculo")
+                        .size();
+
+        int totalServicios =
+                gestorServicios
+                        .filtrarPorTipo("ruta")
+                        .size()
+                        + gestorServicios
+                        .filtrarPorTipo("paseo")
+                        .size();
+
+        System.out.println(
+                "\n=== CARGA CENTRALIZADA DEL SISTEMA ==="
+        );
+
+        System.out.println(
+                "Clientes cargados: "
+                        + gestorEntidades
+                        .filtrarPorTipo("cliente")
+                        .size()
+        );
+
+        System.out.println(
+                "Guias cargados: "
+                        + gestorEntidades
+                        .filtrarPorTipo("guia")
+                        .size()
+        );
+
+        System.out.println(
+                "Vehiculos cargados: "
+                        + gestorEntidades
+                        .filtrarPorTipo("vehiculo")
+                        .size()
+        );
+
+        System.out.println(
+                "Rutas cargadas: "
+                        + gestorServicios
+                        .filtrarPorTipo("ruta")
+                        .size()
+        );
+
+        System.out.println(
+                "Paseos cargados: "
+                        + gestorServicios
+                        .filtrarPorTipo("paseo")
+                        .size()
+        );
+
+        System.out.println(
+                "\nTotal de entidades cargadas: "
+                        + totalEntidades
+        );
+
+        System.out.println(
+                "Total de servicios cargados: "
+                        + totalServicios
+        );
+
+        if (totalEntidades != 9) {
+            throw new DatoInvalidoException(
+                    "La carga centralizada debia contener "
+                            + "9 entidades, pero se encontraron "
+                            + totalEntidades + "."
+            );
+        }
+
+        if (totalServicios != 4) {
+            throw new DatoInvalidoException(
+                    "La carga centralizada debia contener "
+                            + "4 servicios, pero se encontraron "
+                            + totalServicios + "."
+            );
+        }
+
+        System.out.println(
+                "Carga centralizada comprobada correctamente."
         );
     }
 
