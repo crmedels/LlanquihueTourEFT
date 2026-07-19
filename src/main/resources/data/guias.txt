@@ -1,0 +1,4 @@
+# codigoGuia;rut;nombre;apellido;telefono;correo;calle;numero;comuna;ciudad;especialidad;aniosExperiencia;tarifaDiaria;disponible
+GUI-201;13.456.789-9;Andrea;Morales;945678901;andrea.morales@gmail.com;Los Aromos;215;Llanquihue;Llanquihue;Turismo gastronomico;6;55000;true
+GUI-202;16.789.456-9;Rodrigo;Contreras;956789012;rodrigo.contreras@gmail.com;San Francisco;480;Puerto Varas;Puerto Varas;Paseos lacustres;9;65000;true
+GUI-203;18.923.456-2;Paula;Sepulveda;967890123;paula.sepulveda@gmail.com;Vicente Perez Rosales;760;Frutillar;Frutillar;Rutas culturales;4;50000;false
