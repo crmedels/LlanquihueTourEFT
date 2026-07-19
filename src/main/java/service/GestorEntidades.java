@@ -6,7 +6,7 @@ import interfaces.Registrable;
 import model.Cliente;
 import model.ColaboradorExterno;
 import model.GuiaTuristico;
-
+import model.Vehiculo;
 import java.util.ArrayList;
 
 /**
@@ -133,15 +133,21 @@ public class GestorEntidades {
                     && entidad instanceof ColaboradorExterno) {
 
                 resultados.add(entidad);
+
+            } else if (tipoNormalizado.equals("vehiculo")
+                    && entidad instanceof Vehiculo) {
+
+                resultados.add(entidad);
             }
         }
 
         if (!tipoNormalizado.equals("cliente")
                 && !tipoNormalizado.equals("guia")
-                && !tipoNormalizado.equals("colaborador")) {
+                && !tipoNormalizado.equals("colaborador")
+                && !tipoNormalizado.equals("vehiculo")) {
 
             throw new DatoInvalidoException(
-                    "El tipo debe ser cliente, guia o colaborador."
+                    "El tipo debe ser cliente, guia, colaborador o vehiculo."
             );
         }
 
