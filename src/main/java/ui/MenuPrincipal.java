@@ -9,6 +9,7 @@ import model.ColaboradorExterno;
 import model.Direccion;
 import model.GuiaTuristico;
 import model.Persona;
+import model.ServicioTuristico;
 import model.Vehiculo;
 import service.GestorEntidades;
 import service.GestorReservas;
@@ -38,9 +39,6 @@ public class MenuPrincipal {
     private final GestorServicios gestorServicios;
     private final GestorReservas gestorReservas;
 
-    /**
-     * Crea el menu principal y sus gestores.
-     */
     public MenuPrincipal() {
         gestorEntidades = new GestorEntidades();
         gestorServicios = new GestorServicios();
@@ -48,7 +46,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Carga los datos iniciales y muestra el menu principal.
+     * Carga los datos iniciales y abre el menu principal.
      */
     public void iniciar() {
 
@@ -75,8 +73,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra las opciones principales hasta que
-     * el usuario decida cerrar el sistema.
+     * Muestra el menu principal.
      */
     private void mostrarMenu() {
 
@@ -92,15 +89,13 @@ public class MenuPrincipal {
 
         while (continuar) {
 
-            int opcionSeleccionada =
-                    mostrarMenuVertical(
-                            "Llanquihue Tour",
-                            "Seleccione una opcion:",
-                            opciones
-                    );
+            int opcion = mostrarMenuVertical(
+                    "Llanquihue Tour",
+                    "Seleccione una opcion:",
+                    opciones
+            );
 
-            switch (opcionSeleccionada) {
-
+            switch (opcion) {
                 case 0:
                     mostrarResumenGeneral();
                     break;
@@ -110,9 +105,7 @@ public class MenuPrincipal {
                     break;
 
                 case 2:
-                    mostrarModuloPendiente(
-                            "Gestion de servicios"
-                    );
+                    mostrarMenuServicios();
                     break;
 
                 case 3:
@@ -141,8 +134,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra las opciones disponibles para gestionar
-     * las entidades registradas en el sistema.
+     * Muestra el menu de entidades.
      */
     private void mostrarMenuEntidades() {
 
@@ -162,15 +154,13 @@ public class MenuPrincipal {
 
         while (continuar) {
 
-            int opcionSeleccionada =
-                    mostrarMenuVertical(
-                            "Gestion de entidades",
-                            "Seleccione una opcion:",
-                            opciones
-                    );
+            int opcion = mostrarMenuVertical(
+                    "Gestion de entidades",
+                    "Seleccione una opcion:",
+                    opciones
+            );
 
-            switch (opcionSeleccionada) {
-
+            switch (opcion) {
                 case 0:
                     registrarCliente();
                     break;
@@ -216,7 +206,54 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra los datos almacenados en los tres gestores.
+     * Muestra el menu de servicios turisticos.
+     */
+    private void mostrarMenuServicios() {
+
+        String[] opciones = {
+                "Listar todos",
+                "Buscar por codigo",
+                "Filtrar por tipo",
+                "Volver"
+        };
+
+        boolean continuar = true;
+
+        while (continuar) {
+
+            int opcion = mostrarMenuVertical(
+                    "Gestion de servicios",
+                    "Seleccione una opcion:",
+                    opciones
+            );
+
+            switch (opcion) {
+                case 0:
+                    mostrarTodosLosServicios();
+                    break;
+
+                case 1:
+                    buscarServicioPorCodigo();
+                    break;
+
+                case 2:
+                    filtrarServiciosPorTipo();
+                    break;
+
+                case 3:
+                case JOptionPane.CLOSED_OPTION:
+                    continuar = false;
+                    break;
+
+                default:
+                    continuar = false;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Muestra un resumen de los datos del sistema.
      */
     private void mostrarResumenGeneral() {
 
@@ -228,169 +265,73 @@ public class MenuPrincipal {
                         + "\n\n=== RESERVAS ===\n"
                         + gestorReservas.generarResumenReservas();
 
-        JOptionPane.showMessageDialog(
-                null,
-                resumen,
+        mostrarMensaje(
                 "Resumen general",
-                JOptionPane.INFORMATION_MESSAGE
+                resumen
         );
     }
 
     /**
-     * Solicita los datos necesarios y registra
-     * un nuevo cliente en el sistema.
+     * Registra un cliente desde la interfaz.
      */
     private void registrarCliente() {
 
         String titulo = "Registrar cliente";
 
-        String codigo =
-                solicitarDato(
-                        "Ingrese el codigo del cliente:",
-                        titulo
-                );
+        String[] datos = solicitarDatos(
+                titulo,
+                "Ingrese el codigo del cliente:",
+                "Ingrese el RUT:",
+                "Ingrese el nombre:",
+                "Ingrese el apellido:",
+                "Ingrese el telefono:",
+                "Ingrese el correo electronico:",
+                "Ingrese la calle:",
+                "Ingrese el numero de la direccion:",
+                "Ingrese la comuna:",
+                "Ingrese la ciudad:",
+                "Ingrese la preferencia turistica:"
+        );
 
-        if (codigo == null) {
-            return;
-        }
-
-        String rut =
-                solicitarDato(
-                        "Ingrese el RUT:",
-                        titulo
-                );
-
-        if (rut == null) {
-            return;
-        }
-
-        String nombre =
-                solicitarDato(
-                        "Ingrese el nombre:",
-                        titulo
-                );
-
-        if (nombre == null) {
-            return;
-        }
-
-        String apellido =
-                solicitarDato(
-                        "Ingrese el apellido:",
-                        titulo
-                );
-
-        if (apellido == null) {
-            return;
-        }
-
-        String telefono =
-                solicitarDato(
-                        "Ingrese el telefono:",
-                        titulo
-                );
-
-        if (telefono == null) {
-            return;
-        }
-
-        String correo =
-                solicitarDato(
-                        "Ingrese el correo electronico:",
-                        titulo
-                );
-
-        if (correo == null) {
-            return;
-        }
-
-        String calle =
-                solicitarDato(
-                        "Ingrese la calle:",
-                        titulo
-                );
-
-        if (calle == null) {
-            return;
-        }
-
-        String numeroTexto =
-                solicitarDato(
-                        "Ingrese el numero de la direccion:",
-                        titulo
-                );
-
-        if (numeroTexto == null) {
-            return;
-        }
-
-        String comuna =
-                solicitarDato(
-                        "Ingrese la comuna:",
-                        titulo
-                );
-
-        if (comuna == null) {
-            return;
-        }
-
-        String ciudad =
-                solicitarDato(
-                        "Ingrese la ciudad:",
-                        titulo
-                );
-
-        if (ciudad == null) {
-            return;
-        }
-
-        String preferenciaTuristica =
-                solicitarDato(
-                        "Ingrese la preferencia turistica:",
-                        titulo
-                );
-
-        if (preferenciaTuristica == null) {
+        if (datos == null) {
             return;
         }
 
         try {
             int numeroDireccion =
                     Validador.convertirEntero(
-                            numeroTexto,
+                            datos[7],
                             "El numero de la direccion"
                     );
 
             Direccion direccion =
                     new Direccion(
-                            calle,
+                            datos[6],
                             numeroDireccion,
-                            comuna,
-                            ciudad
+                            datos[8],
+                            datos[9]
                     );
 
             Cliente cliente =
                     new Cliente(
-                            rut,
-                            nombre,
-                            apellido,
-                            telefono,
-                            correo,
+                            datos[1],
+                            datos[2],
+                            datos[3],
+                            datos[4],
+                            datos[5],
                             direccion,
-                            codigo,
-                            preferenciaTuristica
+                            datos[0],
+                            datos[10]
                     );
 
             gestorEntidades.registrarEntidad(
                     cliente
             );
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Cliente registrado correctamente.\n\n"
-                            + cliente.mostrarResumen(),
+            mostrarMensaje(
                     "Registro exitoso",
-                    JOptionPane.INFORMATION_MESSAGE
+                    "Cliente registrado correctamente.\n\n"
+                            + cliente.mostrarResumen()
             );
 
         } catch (DatoInvalidoException
@@ -403,140 +344,30 @@ public class MenuPrincipal {
     }
 
     /**
-     * Solicita los datos necesarios y registra
-     * un nuevo guia turistico en el sistema.
+     * Registra un guia turistico desde la interfaz.
      */
     private void registrarGuiaTuristico() {
 
         String titulo = "Registrar guia turistico";
 
-        String codigo =
-                solicitarDato(
-                        "Ingrese el codigo del guia:",
-                        titulo
-                );
+        String[] datos = solicitarDatos(
+                titulo,
+                "Ingrese el codigo del guia:",
+                "Ingrese el RUT:",
+                "Ingrese el nombre:",
+                "Ingrese el apellido:",
+                "Ingrese el telefono:",
+                "Ingrese el correo electronico:",
+                "Ingrese la calle:",
+                "Ingrese el numero de la direccion:",
+                "Ingrese la comuna:",
+                "Ingrese la ciudad:",
+                "Ingrese la especialidad:",
+                "Ingrese los anios de experiencia:",
+                "Ingrese la tarifa diaria:"
+        );
 
-        if (codigo == null) {
-            return;
-        }
-
-        String rut =
-                solicitarDato(
-                        "Ingrese el RUT:",
-                        titulo
-                );
-
-        if (rut == null) {
-            return;
-        }
-
-        String nombre =
-                solicitarDato(
-                        "Ingrese el nombre:",
-                        titulo
-                );
-
-        if (nombre == null) {
-            return;
-        }
-
-        String apellido =
-                solicitarDato(
-                        "Ingrese el apellido:",
-                        titulo
-                );
-
-        if (apellido == null) {
-            return;
-        }
-
-        String telefono =
-                solicitarDato(
-                        "Ingrese el telefono:",
-                        titulo
-                );
-
-        if (telefono == null) {
-            return;
-        }
-
-        String correo =
-                solicitarDato(
-                        "Ingrese el correo electronico:",
-                        titulo
-                );
-
-        if (correo == null) {
-            return;
-        }
-
-        String calle =
-                solicitarDato(
-                        "Ingrese la calle:",
-                        titulo
-                );
-
-        if (calle == null) {
-            return;
-        }
-
-        String numeroTexto =
-                solicitarDato(
-                        "Ingrese el numero de la direccion:",
-                        titulo
-                );
-
-        if (numeroTexto == null) {
-            return;
-        }
-
-        String comuna =
-                solicitarDato(
-                        "Ingrese la comuna:",
-                        titulo
-                );
-
-        if (comuna == null) {
-            return;
-        }
-
-        String ciudad =
-                solicitarDato(
-                        "Ingrese la ciudad:",
-                        titulo
-                );
-
-        if (ciudad == null) {
-            return;
-        }
-
-        String especialidad =
-                solicitarDato(
-                        "Ingrese la especialidad:",
-                        titulo
-                );
-
-        if (especialidad == null) {
-            return;
-        }
-
-        String experienciaTexto =
-                solicitarDato(
-                        "Ingrese los anios de experiencia:",
-                        titulo
-                );
-
-        if (experienciaTexto == null) {
-            return;
-        }
-
-        String tarifaTexto =
-                solicitarDato(
-                        "Ingrese la tarifa diaria:",
-                        titulo
-                );
-
-        if (tarifaTexto == null) {
+        if (datos == null) {
             return;
         }
 
@@ -552,40 +383,40 @@ public class MenuPrincipal {
         try {
             int numeroDireccion =
                     Validador.convertirEntero(
-                            numeroTexto,
+                            datos[7],
                             "El numero de la direccion"
                     );
 
             int aniosExperiencia =
                     Validador.convertirEntero(
-                            experienciaTexto,
+                            datos[11],
                             "Los anios de experiencia"
                     );
 
             double tarifaDiaria =
                     Validador.convertirDecimal(
-                            tarifaTexto,
+                            datos[12],
                             "La tarifa diaria"
                     );
 
             Direccion direccion =
                     new Direccion(
-                            calle,
+                            datos[6],
                             numeroDireccion,
-                            comuna,
-                            ciudad
+                            datos[8],
+                            datos[9]
                     );
 
             GuiaTuristico guia =
                     new GuiaTuristico(
-                            rut,
-                            nombre,
-                            apellido,
-                            telefono,
-                            correo,
+                            datos[1],
+                            datos[2],
+                            datos[3],
+                            datos[4],
+                            datos[5],
                             direccion,
-                            codigo,
-                            especialidad,
+                            datos[0],
+                            datos[10],
                             aniosExperiencia,
                             tarifaDiaria,
                             disponible
@@ -595,12 +426,10 @@ public class MenuPrincipal {
                     guia
             );
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Guia turistico registrado correctamente.\n\n"
-                            + guia.mostrarResumen(),
+            mostrarMensaje(
                     "Registro exitoso",
-                    JOptionPane.INFORMATION_MESSAGE
+                    "Guia turistico registrado correctamente.\n\n"
+                            + guia.mostrarResumen()
             );
 
         } catch (DatoInvalidoException
@@ -613,60 +442,22 @@ public class MenuPrincipal {
     }
 
     /**
-     * Solicita los datos necesarios y registra
-     * un nuevo vehiculo en el sistema.
+     * Registra un vehiculo desde la interfaz.
      */
     private void registrarVehiculo() {
 
         String titulo = "Registrar vehiculo";
 
-        String patente =
-                solicitarDato(
-                        "Ingrese la patente:",
-                        titulo
-                );
+        String[] datos = solicitarDatos(
+                titulo,
+                "Ingrese la patente:",
+                "Ingrese la marca:",
+                "Ingrese el modelo:",
+                "Ingrese el tipo de vehiculo:",
+                "Ingrese la capacidad de pasajeros:"
+        );
 
-        if (patente == null) {
-            return;
-        }
-
-        String marca =
-                solicitarDato(
-                        "Ingrese la marca:",
-                        titulo
-                );
-
-        if (marca == null) {
-            return;
-        }
-
-        String modelo =
-                solicitarDato(
-                        "Ingrese el modelo:",
-                        titulo
-                );
-
-        if (modelo == null) {
-            return;
-        }
-
-        String tipoVehiculo =
-                solicitarDato(
-                        "Ingrese el tipo de vehiculo:",
-                        titulo
-                );
-
-        if (tipoVehiculo == null) {
-            return;
-        }
-
-        String capacidadTexto =
-                solicitarDato(
-                        "Ingrese la capacidad de pasajeros:",
-                        titulo
-                );
-
-        if (capacidadTexto == null) {
+        if (datos == null) {
             return;
         }
 
@@ -680,19 +471,19 @@ public class MenuPrincipal {
         }
 
         try {
-            int capacidadPasajeros =
+            int capacidad =
                     Validador.convertirEntero(
-                            capacidadTexto,
+                            datos[4],
                             "La capacidad de pasajeros"
                     );
 
             Vehiculo vehiculo =
                     new Vehiculo(
-                            patente,
-                            marca,
-                            modelo,
-                            tipoVehiculo,
-                            capacidadPasajeros,
+                            datos[0],
+                            datos[1],
+                            datos[2],
+                            datos[3],
+                            capacidad,
                             disponible
                     );
 
@@ -700,12 +491,10 @@ public class MenuPrincipal {
                     vehiculo
             );
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Vehiculo registrado correctamente.\n\n"
-                            + vehiculo.mostrarResumen(),
+            mostrarMensaje(
                     "Registro exitoso",
-                    JOptionPane.INFORMATION_MESSAGE
+                    "Vehiculo registrado correctamente.\n\n"
+                            + vehiculo.mostrarResumen()
             );
 
         } catch (DatoInvalidoException
@@ -718,130 +507,29 @@ public class MenuPrincipal {
     }
 
     /**
-     * Solicita los datos necesarios y registra
-     * un nuevo colaborador externo en el sistema.
+     * Registra un colaborador externo desde la interfaz.
      */
     private void registrarColaboradorExterno() {
 
         String titulo = "Registrar colaborador externo";
 
-        String codigo =
-                solicitarDato(
-                        "Ingrese el codigo del colaborador:",
-                        titulo
-                );
+        String[] datos = solicitarDatos(
+                titulo,
+                "Ingrese el codigo del colaborador:",
+                "Ingrese el RUT:",
+                "Ingrese el nombre:",
+                "Ingrese el apellido:",
+                "Ingrese el telefono:",
+                "Ingrese el correo electronico:",
+                "Ingrese la calle:",
+                "Ingrese el numero de la direccion:",
+                "Ingrese la comuna:",
+                "Ingrese la ciudad:",
+                "Ingrese el tipo de servicio:",
+                "Ingrese la tarifa por servicio:"
+        );
 
-        if (codigo == null) {
-            return;
-        }
-
-        String rut =
-                solicitarDato(
-                        "Ingrese el RUT:",
-                        titulo
-                );
-
-        if (rut == null) {
-            return;
-        }
-
-        String nombre =
-                solicitarDato(
-                        "Ingrese el nombre:",
-                        titulo
-                );
-
-        if (nombre == null) {
-            return;
-        }
-
-        String apellido =
-                solicitarDato(
-                        "Ingrese el apellido:",
-                        titulo
-                );
-
-        if (apellido == null) {
-            return;
-        }
-
-        String telefono =
-                solicitarDato(
-                        "Ingrese el telefono:",
-                        titulo
-                );
-
-        if (telefono == null) {
-            return;
-        }
-
-        String correo =
-                solicitarDato(
-                        "Ingrese el correo electronico:",
-                        titulo
-                );
-
-        if (correo == null) {
-            return;
-        }
-
-        String calle =
-                solicitarDato(
-                        "Ingrese la calle:",
-                        titulo
-                );
-
-        if (calle == null) {
-            return;
-        }
-
-        String numeroTexto =
-                solicitarDato(
-                        "Ingrese el numero de la direccion:",
-                        titulo
-                );
-
-        if (numeroTexto == null) {
-            return;
-        }
-
-        String comuna =
-                solicitarDato(
-                        "Ingrese la comuna:",
-                        titulo
-                );
-
-        if (comuna == null) {
-            return;
-        }
-
-        String ciudad =
-                solicitarDato(
-                        "Ingrese la ciudad:",
-                        titulo
-                );
-
-        if (ciudad == null) {
-            return;
-        }
-
-        String tipoServicio =
-                solicitarDato(
-                        "Ingrese el tipo de servicio:",
-                        titulo
-                );
-
-        if (tipoServicio == null) {
-            return;
-        }
-
-        String tarifaTexto =
-                solicitarDato(
-                        "Ingrese la tarifa por servicio:",
-                        titulo
-                );
-
-        if (tarifaTexto == null) {
+        if (datos == null) {
             return;
         }
 
@@ -857,35 +545,35 @@ public class MenuPrincipal {
         try {
             int numeroDireccion =
                     Validador.convertirEntero(
-                            numeroTexto,
+                            datos[7],
                             "El numero de la direccion"
                     );
 
-            double tarifaPorServicio =
+            double tarifa =
                     Validador.convertirDecimal(
-                            tarifaTexto,
+                            datos[11],
                             "La tarifa por servicio"
                     );
 
             Direccion direccion =
                     new Direccion(
-                            calle,
+                            datos[6],
                             numeroDireccion,
-                            comuna,
-                            ciudad
+                            datos[8],
+                            datos[9]
                     );
 
             ColaboradorExterno colaborador =
                     new ColaboradorExterno(
-                            rut,
-                            nombre,
-                            apellido,
-                            telefono,
-                            correo,
+                            datos[1],
+                            datos[2],
+                            datos[3],
+                            datos[4],
+                            datos[5],
                             direccion,
-                            codigo,
-                            tipoServicio,
-                            tarifaPorServicio,
+                            datos[0],
+                            datos[10],
+                            tarifa,
                             disponible
                     );
 
@@ -893,12 +581,10 @@ public class MenuPrincipal {
                     colaborador
             );
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Colaborador externo registrado correctamente.\n\n"
-                            + colaborador.mostrarResumen(),
+            mostrarMensaje(
                     "Registro exitoso",
-                    JOptionPane.INFORMATION_MESSAGE
+                    "Colaborador externo registrado correctamente.\n\n"
+                            + colaborador.mostrarResumen()
             );
 
         } catch (DatoInvalidoException
@@ -911,7 +597,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra todas las entidades registradas.
+     * Muestra todas las entidades.
      */
     private void mostrarTodasLasEntidades() {
 
@@ -922,16 +608,14 @@ public class MenuPrincipal {
             resumen = "No existen entidades registradas.";
         }
 
-        JOptionPane.showMessageDialog(
-                null,
-                resumen,
+        mostrarMensaje(
                 "Entidades registradas",
-                JOptionPane.INFORMATION_MESSAGE
+                resumen
         );
     }
 
     /**
-     * Busca una entidad mediante su codigo o patente.
+     * Busca una entidad por codigo o patente.
      */
     private void buscarEntidadPorIdentificador() {
 
@@ -952,34 +636,30 @@ public class MenuPrincipal {
             return;
         }
 
-        Registrable entidadEncontrada =
+        Registrable entidad =
                 gestorEntidades.buscarPorIdentificador(
                         identificador
                 );
 
-        if (entidadEncontrada == null) {
+        if (entidad == null) {
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "No se encontro una entidad con el identificador "
-                            + identificador + ".",
+            mostrarMensaje(
                     "Resultado de busqueda",
-                    JOptionPane.INFORMATION_MESSAGE
+                    "No se encontro una entidad con el identificador "
+                            + identificador + "."
             );
 
             return;
         }
 
-        JOptionPane.showMessageDialog(
-                null,
-                entidadEncontrada.mostrarResumen(),
+        mostrarMensaje(
                 "Entidad encontrada",
-                JOptionPane.INFORMATION_MESSAGE
+                entidad.mostrarResumen()
         );
     }
 
     /**
-     * Busca una persona registrada mediante su RUT.
+     * Busca una persona por RUT.
      */
     private void buscarPersonaPorRut() {
 
@@ -994,28 +674,24 @@ public class MenuPrincipal {
         }
 
         try {
-            Persona personaEncontrada =
+            Persona persona =
                     gestorEntidades.buscarPersonaPorRut(
                             rut
                     );
 
-            if (personaEncontrada == null) {
+            if (persona == null) {
 
-                JOptionPane.showMessageDialog(
-                        null,
-                        "No se encontro una persona con el RUT indicado.",
+                mostrarMensaje(
                         "Resultado de busqueda",
-                        JOptionPane.INFORMATION_MESSAGE
+                        "No se encontro una persona con el RUT indicado."
                 );
 
                 return;
             }
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    personaEncontrada.toString(),
+            mostrarMensaje(
                     "Persona encontrada",
-                    JOptionPane.INFORMATION_MESSAGE
+                    persona.toString()
             );
 
         } catch (DatoInvalidoException e) {
@@ -1027,12 +703,11 @@ public class MenuPrincipal {
     }
 
     /**
-     * Permite seleccionar un tipo de entidad
-     * y muestra los registros correspondientes.
+     * Filtra las entidades por tipo.
      */
     private void filtrarEntidadesPorTipo() {
 
-        String[] tipos = {
+        String[] opciones = {
                 "Clientes",
                 "Guias turisticos",
                 "Colaboradores externos",
@@ -1040,35 +715,34 @@ public class MenuPrincipal {
                 "Cancelar"
         };
 
-        int opcionSeleccionada =
+        int opcion =
                 mostrarMenuVertical(
                         "Filtrar entidades",
                         "Seleccione el tipo de entidad:",
-                        tipos
+                        opciones
                 );
 
-        String tipoBuscado;
+        String tipo;
         String titulo;
 
-        switch (opcionSeleccionada) {
-
+        switch (opcion) {
             case 0:
-                tipoBuscado = "cliente";
+                tipo = "cliente";
                 titulo = "Clientes registrados";
                 break;
 
             case 1:
-                tipoBuscado = "guia";
+                tipo = "guia";
                 titulo = "Guias turisticos registrados";
                 break;
 
             case 2:
-                tipoBuscado = "colaborador";
+                tipo = "colaborador";
                 titulo = "Colaboradores externos registrados";
                 break;
 
             case 3:
-                tipoBuscado = "vehiculo";
+                tipo = "vehiculo";
                 titulo = "Vehiculos registrados";
                 break;
 
@@ -1081,13 +755,13 @@ public class MenuPrincipal {
         }
 
         try {
-            List<Registrable> entidadesFiltradas =
+            List<Registrable> entidades =
                     gestorEntidades.filtrarPorTipo(
-                            tipoBuscado
+                            tipo
                     );
 
             mostrarEntidadesFiltradas(
-                    entidadesFiltradas,
+                    entidades,
                     titulo
             );
 
@@ -1100,10 +774,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra una coleccion de entidades filtradas.
-     *
-     * @param entidades entidades que se desean mostrar
-     * @param titulo titulo de la ventana
+     * Muestra una lista filtrada de entidades.
      */
     private void mostrarEntidadesFiltradas(
             List<Registrable> entidades,
@@ -1112,11 +783,9 @@ public class MenuPrincipal {
 
         if (entidades.isEmpty()) {
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "No se encontraron registros.",
+            mostrarMensaje(
                     titulo,
-                    JOptionPane.INFORMATION_MESSAGE
+                    "No se encontraron registros."
             );
 
             return;
@@ -1134,20 +803,201 @@ public class MenuPrincipal {
             resumen.append("\n");
         }
 
-        JOptionPane.showMessageDialog(
-                null,
-                resumen.toString(),
+        mostrarMensaje(
                 titulo,
-                JOptionPane.INFORMATION_MESSAGE
+                resumen.toString()
         );
     }
 
     /**
-     * Solicita un dato mediante una ventana de entrada.
-     *
-     * @param mensaje mensaje mostrado al usuario
-     * @param titulo titulo de la ventana
-     * @return texto ingresado o null si se cancela
+     * Muestra todos los servicios turisticos.
+     */
+    private void mostrarTodosLosServicios() {
+
+        String resumen =
+                gestorServicios.generarResumenServicios();
+
+        if (resumen == null || resumen.isBlank()) {
+            resumen = "No existen servicios turisticos registrados.";
+        }
+
+        mostrarMensaje(
+                "Servicios turisticos",
+                resumen
+        );
+    }
+
+    /**
+     * Busca un servicio por codigo.
+     */
+    private void buscarServicioPorCodigo() {
+
+        String codigo =
+                solicitarDato(
+                        "Ingrese el codigo del servicio:",
+                        "Buscar servicio"
+                );
+
+        if (codigo == null) {
+            return;
+        }
+
+        if (codigo.isEmpty()) {
+
+            mostrarError(
+                    "Debe ingresar el codigo del servicio."
+            );
+
+            return;
+        }
+
+        ServicioTuristico servicio =
+                gestorServicios.buscarPorCodigo(
+                        codigo
+                );
+
+        if (servicio == null) {
+
+            mostrarMensaje(
+                    "Resultado de busqueda",
+                    "No se encontro un servicio con el codigo "
+                            + codigo + "."
+            );
+
+            return;
+        }
+
+        mostrarMensaje(
+                "Servicio encontrado",
+                servicio.mostrarResumen()
+        );
+    }
+
+    /**
+     * Filtra servicios por su subclase.
+     */
+    private void filtrarServiciosPorTipo() {
+
+        String[] opciones = {
+                "Rutas gastronomicas",
+                "Paseos lacustres",
+                "Cancelar"
+        };
+
+        int opcion =
+                mostrarMenuVertical(
+                        "Filtrar servicios",
+                        "Seleccione el tipo de servicio:",
+                        opciones
+                );
+
+        String tipo;
+        String titulo;
+
+        switch (opcion) {
+            case 0:
+                tipo = "ruta";
+                titulo = "Rutas gastronomicas";
+                break;
+
+            case 1:
+                tipo = "paseo";
+                titulo = "Paseos lacustres";
+                break;
+
+            case 2:
+            case JOptionPane.CLOSED_OPTION:
+                return;
+
+            default:
+                return;
+        }
+
+        try {
+            List<ServicioTuristico> servicios =
+                    gestorServicios.filtrarPorTipo(
+                            tipo
+                    );
+
+            mostrarServiciosFiltrados(
+                    servicios,
+                    titulo
+            );
+
+        } catch (DatoInvalidoException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Muestra una lista filtrada de servicios.
+     */
+    private void mostrarServiciosFiltrados(
+            List<ServicioTuristico> servicios,
+            String titulo
+    ) {
+
+        if (servicios.isEmpty()) {
+
+            mostrarMensaje(
+                    titulo,
+                    "No se encontraron servicios."
+            );
+
+            return;
+        }
+
+        StringBuilder resumen =
+                new StringBuilder();
+
+        for (ServicioTuristico servicio : servicios) {
+
+            resumen.append(
+                    servicio.mostrarResumen()
+            );
+
+            resumen.append("\n");
+        }
+
+        mostrarMensaje(
+                titulo,
+                resumen.toString()
+        );
+    }
+
+    /**
+     * Solicita varios datos y detiene el proceso
+     * inmediatamente si el usuario cancela.
+     */
+    private String[] solicitarDatos(
+            String titulo,
+            String... mensajes
+    ) {
+
+        String[] datos =
+                new String[mensajes.length];
+
+        for (int i = 0; i < mensajes.length; i++) {
+
+            datos[i] =
+                    solicitarDato(
+                            mensajes[i],
+                            titulo
+                    );
+
+            if (datos[i] == null) {
+                return null;
+            }
+        }
+
+        return datos;
+    }
+
+    /**
+     * Solicita un dato de texto.
      */
     private String solicitarDato(
             String mensaje,
@@ -1170,10 +1020,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Solicita el estado de disponibilidad.
-     *
-     * @param titulo titulo de la ventana
-     * @return true, false o null si se cancela
+     * Solicita la disponibilidad de un registro.
      */
     private Boolean solicitarDisponibilidad(
             String titulo
@@ -1185,15 +1032,14 @@ public class MenuPrincipal {
                 "Cancelar"
         };
 
-        int opcionSeleccionada =
+        int opcion =
                 mostrarMenuVertical(
                         titulo,
                         "Seleccione la disponibilidad:",
                         opciones
                 );
 
-        switch (opcionSeleccionada) {
-
+        switch (opcion) {
             case 0:
                 return true;
 
@@ -1210,12 +1056,7 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra un menu con botones organizados verticalmente.
-     *
-     * @param titulo titulo de la ventana
-     * @param mensaje mensaje mostrado sobre los botones
-     * @param opciones opciones disponibles
-     * @return indice de la opcion seleccionada
+     * Muestra un menu con los botones en forma vertical.
      */
     private int mostrarMenuVertical(
             String titulo,
@@ -1330,28 +1171,37 @@ public class MenuPrincipal {
     }
 
     /**
-     * Informa que un modulo sera implementado
-     * en los siguientes pasos.
-     *
-     * @param nombreModulo nombre del modulo seleccionado
+     * Muestra un mensaje informativo.
      */
-    private void mostrarModuloPendiente(
-            String nombreModulo
+    private void mostrarMensaje(
+            String titulo,
+            String mensaje
     ) {
 
         JOptionPane.showMessageDialog(
                 null,
-                nombreModulo
-                        + "\n\nEl modulo sera habilitado proximamente.",
-                "Llanquihue Tour",
+                mensaje,
+                titulo,
                 JOptionPane.INFORMATION_MESSAGE
         );
     }
 
     /**
+     * Informa que un modulo aun no ha sido habilitado.
+     */
+    private void mostrarModuloPendiente(
+            String nombreModulo
+    ) {
+
+        mostrarMensaje(
+                "Llanquihue Tour",
+                nombreModulo
+                        + "\n\nEl modulo sera habilitado proximamente."
+        );
+    }
+
+    /**
      * Muestra un mensaje de error.
-     *
-     * @param mensaje informacion del error
      */
     private void mostrarError(
             String mensaje
