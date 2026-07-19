@@ -15,7 +15,14 @@ import service.GestorReservas;
 import service.GestorServicios;
 import util.Validador;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.io.IOException;
 import java.util.List;
 
@@ -86,15 +93,10 @@ public class MenuPrincipal {
         while (continuar) {
 
             int opcionSeleccionada =
-                    JOptionPane.showOptionDialog(
-                            null,
-                            "Seleccione una opcion:",
+                    mostrarMenuVertical(
                             "Llanquihue Tour",
-                            JOptionPane.DEFAULT_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            opciones,
-                            opciones[0]
+                            "Seleccione una opcion:",
+                            opciones
                     );
 
             switch (opcionSeleccionada) {
@@ -161,15 +163,10 @@ public class MenuPrincipal {
         while (continuar) {
 
             int opcionSeleccionada =
-                    JOptionPane.showOptionDialog(
-                            null,
-                            "Seleccione una opcion:",
+                    mostrarMenuVertical(
                             "Gestion de entidades",
-                            JOptionPane.DEFAULT_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            opciones,
-                            opciones[0]
+                            "Seleccione una opcion:",
+                            opciones
                     );
 
             switch (opcionSeleccionada) {
@@ -225,14 +222,11 @@ public class MenuPrincipal {
 
         String resumen =
                 "=== ENTIDADES REGISTRADAS ===\n"
-                        + gestorEntidades
-                        .generarResumenEntidades()
+                        + gestorEntidades.generarResumenEntidades()
                         + "\n\n=== SERVICIOS TURISTICOS ===\n"
-                        + gestorServicios
-                        .generarResumenServicios()
+                        + gestorServicios.generarResumenServicios()
                         + "\n\n=== RESERVAS ===\n"
-                        + gestorReservas
-                        .generarResumenReservas();
+                        + gestorReservas.generarResumenReservas();
 
         JOptionPane.showMessageDialog(
                 null,
@@ -1047,15 +1041,10 @@ public class MenuPrincipal {
         };
 
         int opcionSeleccionada =
-                JOptionPane.showOptionDialog(
-                        null,
-                        "Seleccione el tipo de entidad:",
+                mostrarMenuVertical(
                         "Filtrar entidades",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        tipos,
-                        tipos[0]
+                        "Seleccione el tipo de entidad:",
+                        tipos
                 );
 
         String tipoBuscado;
@@ -1197,15 +1186,10 @@ public class MenuPrincipal {
         };
 
         int opcionSeleccionada =
-                JOptionPane.showOptionDialog(
-                        null,
-                        "Seleccione la disponibilidad:",
+                mostrarMenuVertical(
                         titulo,
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        opciones,
-                        opciones[0]
+                        "Seleccione la disponibilidad:",
+                        opciones
                 );
 
         switch (opcionSeleccionada) {
@@ -1223,6 +1207,126 @@ public class MenuPrincipal {
             default:
                 return null;
         }
+    }
+
+    /**
+     * Muestra un menu con botones organizados verticalmente.
+     *
+     * @param titulo titulo de la ventana
+     * @param mensaje mensaje mostrado sobre los botones
+     * @param opciones opciones disponibles
+     * @return indice de la opcion seleccionada
+     */
+    private int mostrarMenuVertical(
+            String titulo,
+            String mensaje,
+            String[] opciones
+    ) {
+
+        JPanel panelPrincipal =
+                new JPanel(
+                        new BorderLayout(
+                                0,
+                                10
+                        )
+                );
+
+        panelPrincipal.setBorder(
+                BorderFactory.createEmptyBorder(
+                        15,
+                        15,
+                        15,
+                        15
+                )
+        );
+
+        JLabel etiqueta =
+                new JLabel(
+                        mensaje
+                );
+
+        JPanel panelBotones =
+                new JPanel(
+                        new GridLayout(
+                                0,
+                                1,
+                                0,
+                                8
+                        )
+                );
+
+        panelPrincipal.add(
+                etiqueta,
+                BorderLayout.NORTH
+        );
+
+        panelPrincipal.add(
+                panelBotones,
+                BorderLayout.CENTER
+        );
+
+        JDialog dialogo =
+                new JDialog();
+
+        dialogo.setTitle(
+                titulo
+        );
+
+        dialogo.setModal(
+                true
+        );
+
+        dialogo.setDefaultCloseOperation(
+                JDialog.DISPOSE_ON_CLOSE
+        );
+
+        dialogo.setContentPane(
+                panelPrincipal
+        );
+
+        int[] opcionSeleccionada = {
+                JOptionPane.CLOSED_OPTION
+        };
+
+        for (int i = 0; i < opciones.length; i++) {
+
+            final int indice = i;
+
+            JButton boton =
+                    new JButton(
+                            opciones[i]
+                    );
+
+            boton.addActionListener(
+                    evento -> {
+
+                        opcionSeleccionada[0] =
+                                indice;
+
+                        dialogo.dispose();
+                    }
+            );
+
+            panelBotones.add(
+                    boton
+            );
+        }
+
+        dialogo.setResizable(
+                false
+        );
+
+        dialogo.pack();
+
+        dialogo.setLocationRelativeTo(
+                null
+        );
+
+        dialogo.setVisible(
+                true
+        );
+
+        return opcionSeleccionada[0];
     }
 
     /**
