@@ -247,4 +247,54 @@ public class Validador {
         }
     }
 
+    /**
+     * Verifica que una patente tenga uno de los formatos
+     * aceptados por el sistema.
+     *
+     * @param patente patente que se desea validar
+     * @throws DatoInvalidoException si la patente no es valida
+     */
+    public static void validarPatente(String patente)
+            throws DatoInvalidoException {
+
+        validarTextoObligatorio(patente, "La patente");
+
+        String patenteLimpia = patente
+                .replace(" ", "")
+                .replace("-", "")
+                .toUpperCase();
+
+        boolean formatoAntiguo =
+                patenteLimpia.matches("[A-Z]{2}\\d{4}");
+
+        boolean formatoActual =
+                patenteLimpia.matches("[A-Z]{4}\\d{2}");
+
+        if (!formatoAntiguo && !formatoActual) {
+            throw new DatoInvalidoException(
+                    "La patente debe tener un formato valido. "
+                            + "Ejemplos: AB1234 o ABCD12."
+            );
+        }
+    }
+
+    /**
+     * Retorna una patente sin espacios ni guiones
+     * y con sus letras en mayuscula.
+     *
+     * @param patente patente que se desea normalizar
+     * @return patente normalizada
+     * @throws DatoInvalidoException si la patente no es valida
+     */
+    public static String normalizarPatente(String patente)
+            throws DatoInvalidoException {
+
+        validarPatente(patente);
+
+        return patente
+                .replace(" ", "")
+                .replace("-", "")
+                .toUpperCase();
+    }
+
 }
