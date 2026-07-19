@@ -8,7 +8,9 @@ import model.Cliente;
 import model.ColaboradorExterno;
 import model.Direccion;
 import model.GuiaTuristico;
+import model.PaseoLacustre;
 import model.Persona;
+import model.RutaGastronomica;
 import model.ServicioTuristico;
 import model.Vehiculo;
 import service.GestorEntidades;
@@ -39,6 +41,9 @@ public class MenuPrincipal {
     private final GestorServicios gestorServicios;
     private final GestorReservas gestorReservas;
 
+    /**
+     * Crea el menu principal y los gestores del sistema.
+     */
     public MenuPrincipal() {
         gestorEntidades = new GestorEntidades();
         gestorServicios = new GestorServicios();
@@ -89,13 +94,15 @@ public class MenuPrincipal {
 
         while (continuar) {
 
-            int opcion = mostrarMenuVertical(
-                    "Llanquihue Tour",
-                    "Seleccione una opcion:",
-                    opciones
-            );
+            int opcion =
+                    mostrarMenuVertical(
+                            "Llanquihue Tour",
+                            "Seleccione una opcion:",
+                            opciones
+                    );
 
             switch (opcion) {
+
                 case 0:
                     mostrarResumenGeneral();
                     break;
@@ -125,11 +132,9 @@ public class MenuPrincipal {
             }
         }
 
-        JOptionPane.showMessageDialog(
-                null,
-                "El sistema se ha cerrado correctamente.",
+        mostrarMensaje(
                 "Llanquihue Tour",
-                JOptionPane.INFORMATION_MESSAGE
+                "El sistema se ha cerrado correctamente."
         );
     }
 
@@ -154,13 +159,15 @@ public class MenuPrincipal {
 
         while (continuar) {
 
-            int opcion = mostrarMenuVertical(
-                    "Gestion de entidades",
-                    "Seleccione una opcion:",
-                    opciones
-            );
+            int opcion =
+                    mostrarMenuVertical(
+                            "Gestion de entidades",
+                            "Seleccione una opcion:",
+                            opciones
+                    );
 
             switch (opcion) {
+
                 case 0:
                     registrarCliente();
                     break;
@@ -211,6 +218,8 @@ public class MenuPrincipal {
     private void mostrarMenuServicios() {
 
         String[] opciones = {
+                "Registrar ruta gastronomica",
+                "Registrar paseo lacustre",
                 "Listar todos",
                 "Buscar por codigo",
                 "Filtrar por tipo",
@@ -221,26 +230,36 @@ public class MenuPrincipal {
 
         while (continuar) {
 
-            int opcion = mostrarMenuVertical(
-                    "Gestion de servicios",
-                    "Seleccione una opcion:",
-                    opciones
-            );
+            int opcion =
+                    mostrarMenuVertical(
+                            "Gestion de servicios",
+                            "Seleccione una opcion:",
+                            opciones
+                    );
 
             switch (opcion) {
+
                 case 0:
-                    mostrarTodosLosServicios();
+                    registrarRutaGastronomica();
                     break;
 
                 case 1:
-                    buscarServicioPorCodigo();
+                    registrarPaseoLacustre();
                     break;
 
                 case 2:
-                    filtrarServiciosPorTipo();
+                    mostrarTodosLosServicios();
                     break;
 
                 case 3:
+                    buscarServicioPorCodigo();
+                    break;
+
+                case 4:
+                    filtrarServiciosPorTipo();
+                    break;
+
+                case 5:
                 case JOptionPane.CLOSED_OPTION:
                     continuar = false;
                     break;
@@ -278,20 +297,21 @@ public class MenuPrincipal {
 
         String titulo = "Registrar cliente";
 
-        String[] datos = solicitarDatos(
-                titulo,
-                "Ingrese el codigo del cliente:",
-                "Ingrese el RUT:",
-                "Ingrese el nombre:",
-                "Ingrese el apellido:",
-                "Ingrese el telefono:",
-                "Ingrese el correo electronico:",
-                "Ingrese la calle:",
-                "Ingrese el numero de la direccion:",
-                "Ingrese la comuna:",
-                "Ingrese la ciudad:",
-                "Ingrese la preferencia turistica:"
-        );
+        String[] datos =
+                solicitarDatos(
+                        titulo,
+                        "Ingrese el codigo del cliente:",
+                        "Ingrese el RUT:",
+                        "Ingrese el nombre:",
+                        "Ingrese el apellido:",
+                        "Ingrese el telefono:",
+                        "Ingrese el correo electronico:",
+                        "Ingrese la calle:",
+                        "Ingrese el numero de la direccion:",
+                        "Ingrese la comuna:",
+                        "Ingrese la ciudad:",
+                        "Ingrese la preferencia turistica:"
+                );
 
         if (datos == null) {
             return;
@@ -350,22 +370,23 @@ public class MenuPrincipal {
 
         String titulo = "Registrar guia turistico";
 
-        String[] datos = solicitarDatos(
-                titulo,
-                "Ingrese el codigo del guia:",
-                "Ingrese el RUT:",
-                "Ingrese el nombre:",
-                "Ingrese el apellido:",
-                "Ingrese el telefono:",
-                "Ingrese el correo electronico:",
-                "Ingrese la calle:",
-                "Ingrese el numero de la direccion:",
-                "Ingrese la comuna:",
-                "Ingrese la ciudad:",
-                "Ingrese la especialidad:",
-                "Ingrese los anios de experiencia:",
-                "Ingrese la tarifa diaria:"
-        );
+        String[] datos =
+                solicitarDatos(
+                        titulo,
+                        "Ingrese el codigo del guia:",
+                        "Ingrese el RUT:",
+                        "Ingrese el nombre:",
+                        "Ingrese el apellido:",
+                        "Ingrese el telefono:",
+                        "Ingrese el correo electronico:",
+                        "Ingrese la calle:",
+                        "Ingrese el numero de la direccion:",
+                        "Ingrese la comuna:",
+                        "Ingrese la ciudad:",
+                        "Ingrese la especialidad:",
+                        "Ingrese los anios de experiencia:",
+                        "Ingrese la tarifa diaria:"
+                );
 
         if (datos == null) {
             return;
@@ -448,14 +469,15 @@ public class MenuPrincipal {
 
         String titulo = "Registrar vehiculo";
 
-        String[] datos = solicitarDatos(
-                titulo,
-                "Ingrese la patente:",
-                "Ingrese la marca:",
-                "Ingrese el modelo:",
-                "Ingrese el tipo de vehiculo:",
-                "Ingrese la capacidad de pasajeros:"
-        );
+        String[] datos =
+                solicitarDatos(
+                        titulo,
+                        "Ingrese la patente:",
+                        "Ingrese la marca:",
+                        "Ingrese el modelo:",
+                        "Ingrese el tipo de vehiculo:",
+                        "Ingrese la capacidad de pasajeros:"
+                );
 
         if (datos == null) {
             return;
@@ -513,21 +535,22 @@ public class MenuPrincipal {
 
         String titulo = "Registrar colaborador externo";
 
-        String[] datos = solicitarDatos(
-                titulo,
-                "Ingrese el codigo del colaborador:",
-                "Ingrese el RUT:",
-                "Ingrese el nombre:",
-                "Ingrese el apellido:",
-                "Ingrese el telefono:",
-                "Ingrese el correo electronico:",
-                "Ingrese la calle:",
-                "Ingrese el numero de la direccion:",
-                "Ingrese la comuna:",
-                "Ingrese la ciudad:",
-                "Ingrese el tipo de servicio:",
-                "Ingrese la tarifa por servicio:"
-        );
+        String[] datos =
+                solicitarDatos(
+                        titulo,
+                        "Ingrese el codigo del colaborador:",
+                        "Ingrese el RUT:",
+                        "Ingrese el nombre:",
+                        "Ingrese el apellido:",
+                        "Ingrese el telefono:",
+                        "Ingrese el correo electronico:",
+                        "Ingrese la calle:",
+                        "Ingrese el numero de la direccion:",
+                        "Ingrese la comuna:",
+                        "Ingrese la ciudad:",
+                        "Ingrese el tipo de servicio:",
+                        "Ingrese la tarifa por servicio:"
+                );
 
         if (datos == null) {
             return;
@@ -597,6 +620,207 @@ public class MenuPrincipal {
     }
 
     /**
+     * Registra una ruta gastronomica desde la interfaz.
+     */
+    private void registrarRutaGastronomica() {
+
+        String titulo = "Registrar ruta gastronomica";
+
+        String[] datos =
+                solicitarDatos(
+                        titulo,
+                        "Ingrese el codigo del servicio:",
+                        "Ingrese el nombre:",
+                        "Ingrese la descripcion:",
+                        "Ingrese el precio base:",
+                        "Ingrese la duracion en horas:",
+                        "Ingrese la capacidad maxima:",
+                        "Ingrese el tipo de cocina:",
+                        "Ingrese la cantidad de paradas:",
+                        "Ingrese el costo de degustacion por persona:"
+                );
+
+        if (datos == null) {
+            return;
+        }
+
+        Boolean disponible =
+                solicitarDisponibilidad(
+                        titulo
+                );
+
+        if (disponible == null) {
+            return;
+        }
+
+        try {
+            double precioBase =
+                    Validador.convertirDecimal(
+                            datos[3],
+                            "El precio base"
+                    );
+
+            int duracionHoras =
+                    Validador.convertirEntero(
+                            datos[4],
+                            "La duracion en horas"
+                    );
+
+            int capacidadMaxima =
+                    Validador.convertirEntero(
+                            datos[5],
+                            "La capacidad maxima"
+                    );
+
+            int cantidadParadas =
+                    Validador.convertirEntero(
+                            datos[7],
+                            "La cantidad de paradas"
+                    );
+
+            double costoDegustacion =
+                    Validador.convertirDecimal(
+                            datos[8],
+                            "El costo de degustacion por persona"
+                    );
+
+            RutaGastronomica ruta =
+                    new RutaGastronomica(
+                            datos[0],
+                            datos[1],
+                            datos[2],
+                            precioBase,
+                            duracionHoras,
+                            capacidadMaxima,
+                            disponible,
+                            datos[6],
+                            cantidadParadas,
+                            costoDegustacion
+                    );
+
+            gestorServicios.registrarServicio(
+                    ruta
+            );
+
+            mostrarMensaje(
+                    "Registro exitoso",
+                    "Ruta gastronomica registrada correctamente.\n\n"
+                            + ruta.mostrarResumen()
+            );
+
+        } catch (DatoInvalidoException
+                 | RegistroDuplicadoException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Registra un paseo lacustre desde la interfaz.
+     */
+    private void registrarPaseoLacustre() {
+
+        String titulo = "Registrar paseo lacustre";
+
+        String[] datos =
+                solicitarDatos(
+                        titulo,
+                        "Ingrese el codigo del servicio:",
+                        "Ingrese el nombre:",
+                        "Ingrese la descripcion:",
+                        "Ingrese el precio base:",
+                        "Ingrese la duracion en horas:",
+                        "Ingrese la capacidad maxima:",
+                        "Ingrese el nombre de la embarcacion:",
+                        "Ingrese el sector de navegacion:",
+                        "Ingrese el costo de embarcacion por persona:"
+                );
+
+        if (datos == null) {
+            return;
+        }
+
+        Boolean disponible =
+                solicitarDisponibilidad(
+                        titulo
+                );
+
+        if (disponible == null) {
+            return;
+        }
+
+        Boolean incluyeChaleco =
+                solicitarConfirmacion(
+                        titulo,
+                        "¿El paseo incluye chaleco salvavidas?"
+                );
+
+        if (incluyeChaleco == null) {
+            return;
+        }
+
+        try {
+            double precioBase =
+                    Validador.convertirDecimal(
+                            datos[3],
+                            "El precio base"
+                    );
+
+            int duracionHoras =
+                    Validador.convertirEntero(
+                            datos[4],
+                            "La duracion en horas"
+                    );
+
+            int capacidadMaxima =
+                    Validador.convertirEntero(
+                            datos[5],
+                            "La capacidad maxima"
+                    );
+
+            double costoEmbarcacion =
+                    Validador.convertirDecimal(
+                            datos[8],
+                            "El costo de embarcacion por persona"
+                    );
+
+            PaseoLacustre paseo =
+                    new PaseoLacustre(
+                            datos[0],
+                            datos[1],
+                            datos[2],
+                            precioBase,
+                            duracionHoras,
+                            capacidadMaxima,
+                            disponible,
+                            datos[6],
+                            datos[7],
+                            costoEmbarcacion,
+                            incluyeChaleco
+                    );
+
+            gestorServicios.registrarServicio(
+                    paseo
+            );
+
+            mostrarMensaje(
+                    "Registro exitoso",
+                    "Paseo lacustre registrado correctamente.\n\n"
+                            + paseo.mostrarResumen()
+            );
+
+        } catch (DatoInvalidoException
+                 | RegistroDuplicadoException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+        }
+    }
+
+    /**
      * Muestra todas las entidades.
      */
     private void mostrarTodasLasEntidades() {
@@ -630,9 +854,11 @@ public class MenuPrincipal {
         }
 
         if (identificador.isEmpty()) {
+
             mostrarError(
                     "Debe ingresar un codigo o patente."
             );
+
             return;
         }
 
@@ -726,6 +952,7 @@ public class MenuPrincipal {
         String titulo;
 
         switch (opcion) {
+
             case 0:
                 tipo = "cliente";
                 titulo = "Clientes registrados";
@@ -895,6 +1122,7 @@ public class MenuPrincipal {
         String titulo;
 
         switch (opcion) {
+
             case 0:
                 tipo = "ruta";
                 titulo = "Rutas gastronomicas";
@@ -1040,6 +1268,45 @@ public class MenuPrincipal {
                 );
 
         switch (opcion) {
+
+            case 0:
+                return true;
+
+            case 1:
+                return false;
+
+            case 2:
+            case JOptionPane.CLOSED_OPTION:
+                return null;
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Solicita una respuesta afirmativa o negativa.
+     */
+    private Boolean solicitarConfirmacion(
+            String titulo,
+            String mensaje
+    ) {
+
+        String[] opciones = {
+                "Si",
+                "No",
+                "Cancelar"
+        };
+
+        int opcion =
+                mostrarMenuVertical(
+                        titulo,
+                        mensaje,
+                        opciones
+                );
+
+        switch (opcion) {
+
             case 0:
                 return true;
 
