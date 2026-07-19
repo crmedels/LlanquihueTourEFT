@@ -1,0 +1,4 @@
+# patente;marca;modelo;tipoVehiculo;capacidadPasajeros;disponible
+KLPD48;Mercedes-Benz;Sprinter;Minibus;15;true
+RPXC72;Hyundai;County;Minibus;28;true
+BCDF36;Toyota;Hiace;Van;12;false
