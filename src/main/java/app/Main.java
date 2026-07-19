@@ -16,6 +16,9 @@ import service.GestorServicios;
 import exception.CupoInsuficienteException;
 import model.Reserva;
 import service.GestorReservas;
+import data.LectorClientes;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Punto de entrada principal del sistema Llanquihue Tour.
@@ -36,10 +39,12 @@ public class Main {
             probarGestorEntidades();
             probarGestorServicios();
             probarGestorReservas();
+            probarCargaClientes();
 
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException
-                 | CupoInsuficienteException e) {
+                 | CupoInsuficienteException
+                 | IOException e) {
 
             System.out.println(
                     "No fue posible ejecutar la prueba: "
@@ -535,6 +540,67 @@ public class Main {
             System.out.println(
                     "Duplicado detectado correctamente: "
                             + e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Prueba la lectura de clientes desde un archivo TXT
+     * y su integracion con el gestor de entidades.
+     *
+     * @throws IOException si el archivo no puede ser leido
+     * @throws DatoInvalidoException si algun dato no es valido
+     * @throws RegistroDuplicadoException si existe un codigo repetido
+     */
+    private static void probarCargaClientes()
+            throws IOException,
+            DatoInvalidoException,
+            RegistroDuplicadoException {
+
+        LectorClientes lectorClientes =
+                new LectorClientes();
+
+        ArrayList<Cliente> clientesCargados =
+                lectorClientes.cargarClientes(
+                        "data/clientes.txt"
+                );
+
+        GestorEntidades gestorEntidades =
+                new GestorEntidades();
+
+        for (Cliente cliente : clientesCargados) {
+            gestorEntidades.registrarEntidad(cliente);
+        }
+
+        System.out.println(
+                "\n=== CLIENTES CARGADOS DESDE TXT ==="
+        );
+
+        System.out.println(
+                gestorEntidades.generarResumenEntidades()
+        );
+
+        System.out.println(
+                "Clientes cargados correctamente: "
+                        + clientesCargados.size()
+        );
+
+        System.out.println(
+                "\n=== BUSQUEDA DE CLIENTE CARGADO ==="
+        );
+
+        Registrable clienteEncontrado =
+                gestorEntidades.buscarPorIdentificador(
+                        "CLI-202"
+                );
+
+        if (clienteEncontrado != null) {
+            System.out.println(
+                    clienteEncontrado.mostrarResumen()
+            );
+        } else {
+            System.out.println(
+                    "No se encontro el cliente CLI-202."
             );
         }
     }
