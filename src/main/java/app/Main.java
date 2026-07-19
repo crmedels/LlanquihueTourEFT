@@ -3,18 +3,10 @@ package app;
 import exception.DatoInvalidoException;
 import exception.RegistroDuplicadoException;
 import interfaces.Registrable;
-import model.Cliente;
-import model.ColaboradorExterno;
-import model.Direccion;
-import model.GuiaTuristico;
-import model.PaseoLacustre;
-import model.RutaGastronomica;
-import model.ServicioTuristico;
-import model.Vehiculo;
+import model.*;
 import service.GestorEntidades;
 import service.GestorServicios;
 import exception.CupoInsuficienteException;
-import model.Reserva;
 import service.GestorReservas;
 import data.LectorClientes;
 import data.LectorGuias;
@@ -48,6 +40,7 @@ public class Main {
             probarCargaVehiculos();
             probarCargaServicios();
             probarCargaCentralizada();
+            probarRutDuplicado();
 
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException
@@ -979,6 +972,107 @@ public class Main {
         System.out.println(
                 "Carga centralizada comprobada correctamente."
         );
+    }
+
+    /**
+     * Comprueba que el gestor impida registrar dos personas
+     * con el mismo RUT, aunque posean codigos diferentes.
+     *
+     * @throws DatoInvalidoException si algun dato no es valido
+     * @throws RegistroDuplicadoException si falla el primer registro
+     */
+    private static void probarRutDuplicado()
+            throws DatoInvalidoException,
+            RegistroDuplicadoException {
+
+        GestorEntidades gestorEntidades =
+                new GestorEntidades();
+
+        Direccion primeraDireccion =
+                new Direccion(
+                        "Los Notros",
+                        145,
+                        "Llanquihue",
+                        "Llanquihue"
+                );
+
+        Direccion segundaDireccion =
+                new Direccion(
+                        "San Martin",
+                        320,
+                        "Puerto Varas",
+                        "Puerto Varas"
+                );
+
+        Cliente primerCliente =
+                new Cliente(
+                        "17.654.321-3",
+                        "Daniela",
+                        "Rojas",
+                        "912345670",
+                        "daniela.rojas@gmail.com",
+                        primeraDireccion,
+                        "CLI-301",
+                        "Turismo gastronomico"
+                );
+
+        Cliente segundoCliente =
+                new Cliente(
+                        "17654321-3",
+                        "Daniela",
+                        "Rojas",
+                        "923456780",
+                        "daniela.alternativa@gmail.com",
+                        segundaDireccion,
+                        "CLI-302",
+                        "Paseos lacustres"
+                );
+
+        gestorEntidades.registrarEntidad(
+                primerCliente
+        );
+
+        System.out.println(
+                "\n=== VALIDACION DE RUT DUPLICADO ==="
+        );
+
+        try {
+            gestorEntidades.registrarEntidad(
+                    segundoCliente
+            );
+
+            throw new DatoInvalidoException(
+                    "El sistema permitio registrar "
+                            + "un RUT duplicado."
+            );
+
+        } catch (RegistroDuplicadoException e) {
+
+            System.out.println(
+                    "RUT duplicado detectado correctamente."
+            );
+
+            System.out.println(
+                    e.getMessage()
+            );
+        }
+
+        System.out.println(
+                "Personas almacenadas: "
+                        + gestorEntidades.obtenerCantidadEntidades()
+        );
+
+        Persona personaEncontrada =
+                gestorEntidades.buscarPersonaPorRut(
+                        "17 654 321-3"
+                );
+
+        if (personaEncontrada != null) {
+            System.out.println(
+                    "Persona encontrada por RUT: "
+                            + personaEncontrada.getNombreCompleto()
+            );
+        }
     }
 
 }
