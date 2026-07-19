@@ -297,4 +297,98 @@ public class Validador {
                 .toUpperCase();
     }
 
+    /**
+     * Convierte un texto en un numero entero.
+     *
+     * @param valor texto que contiene el numero
+     * @param nombreCampo nombre del campo convertido
+     * @return numero entero convertido
+     * @throws DatoInvalidoException si el valor no es un entero valido
+     */
+    public static int convertirEntero(
+            String valor,
+            String nombreCampo
+    ) throws DatoInvalidoException {
+
+        validarTextoObligatorio(valor, nombreCampo);
+
+        try {
+            return Integer.parseInt(valor.trim());
+
+        } catch (NumberFormatException e) {
+            throw new DatoInvalidoException(
+                    nombreCampo + " debe contener un numero entero valido."
+            );
+        }
+    }
+
+    /**
+     * Convierte un texto en un numero decimal.
+     *
+     * Permite utilizar punto o coma como separador decimal.
+     *
+     * @param valor texto que contiene el numero
+     * @param nombreCampo nombre del campo convertido
+     * @return numero decimal convertido
+     * @throws DatoInvalidoException si el valor no es un decimal valido
+     */
+    public static double convertirDecimal(
+            String valor,
+            String nombreCampo
+    ) throws DatoInvalidoException {
+
+        validarTextoObligatorio(valor, nombreCampo);
+
+        String valorNormalizado = valor
+                .trim()
+                .replace(",", ".");
+
+        try {
+            return Double.parseDouble(valorNormalizado);
+
+        } catch (NumberFormatException e) {
+            throw new DatoInvalidoException(
+                    nombreCampo + " debe contener un numero decimal valido."
+            );
+        }
+    }
+
+    /**
+     * Convierte un texto en un valor booleano.
+     *
+     * Acepta true, false, si y no.
+     *
+     * @param valor texto que contiene el valor
+     * @param nombreCampo nombre del campo convertido
+     * @return valor booleano convertido
+     * @throws DatoInvalidoException si el valor no es reconocido
+     */
+    public static boolean convertirBooleano(
+            String valor,
+            String nombreCampo
+    ) throws DatoInvalidoException {
+
+        validarTextoObligatorio(valor, nombreCampo);
+
+        String valorNormalizado =
+                valor.trim().toLowerCase();
+
+        if (valorNormalizado.equals("true")
+                || valorNormalizado.equals("si")) {
+
+            return true;
+        }
+
+        if (valorNormalizado.equals("false")
+                || valorNormalizado.equals("no")) {
+
+            return false;
+        }
+
+        throw new DatoInvalidoException(
+                nombreCampo
+                        + " debe contener true, false, si o no."
+        );
+    }
+
 }
