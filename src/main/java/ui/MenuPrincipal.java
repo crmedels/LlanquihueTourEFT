@@ -3,14 +3,20 @@ package ui;
 import data.CargadorDatosIniciales;
 import exception.DatoInvalidoException;
 import exception.RegistroDuplicadoException;
+import interfaces.Registrable;
+import model.Cliente;
+import model.Direccion;
+import model.GuiaTuristico;
+import model.Persona;
+import model.Vehiculo;
 import service.GestorEntidades;
 import service.GestorReservas;
 import service.GestorServicios;
-import interfaces.Registrable;
-import model.Persona;
-import java.util.List;
+import util.Validador;
+
 import javax.swing.JOptionPane;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Administra el menu principal y coordina el acceso
@@ -132,36 +138,15 @@ public class MenuPrincipal {
     }
 
     /**
-     * Muestra los datos almacenados en los tres gestores.
-     */
-    private void mostrarResumenGeneral() {
-
-        String resumen =
-                "=== ENTIDADES REGISTRADAS ===\n"
-                        + gestorEntidades
-                        .generarResumenEntidades()
-                        + "\n\n=== SERVICIOS TURISTICOS ===\n"
-                        + gestorServicios
-                        .generarResumenServicios()
-                        + "\n\n=== RESERVAS ===\n"
-                        + gestorReservas
-                        .generarResumenReservas();
-
-        JOptionPane.showMessageDialog(
-                null,
-                resumen,
-                "Resumen general",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
-    /**
-     * Muestra las opciones disponibles para consultar
+     * Muestra las opciones disponibles para gestionar
      * las entidades registradas en el sistema.
      */
     private void mostrarMenuEntidades() {
 
         String[] opciones = {
+                "Registrar cliente",
+                "Registrar guia turistico",
+                "Registrar vehiculo",
                 "Listar todas",
                 "Buscar por identificador",
                 "Buscar persona por RUT",
@@ -188,22 +173,34 @@ public class MenuPrincipal {
             switch (opcionSeleccionada) {
 
                 case 0:
-                    mostrarTodasLasEntidades();
+                    registrarCliente();
                     break;
 
                 case 1:
-                    buscarEntidadPorIdentificador();
+                    registrarGuiaTuristico();
                     break;
 
                 case 2:
-                    buscarPersonaPorRut();
+                    registrarVehiculo();
                     break;
 
                 case 3:
-                    filtrarEntidadesPorTipo();
+                    mostrarTodasLasEntidades();
                     break;
 
                 case 4:
+                    buscarEntidadPorIdentificador();
+                    break;
+
+                case 5:
+                    buscarPersonaPorRut();
+                    break;
+
+                case 6:
+                    filtrarEntidadesPorTipo();
+                    break;
+
+                case 7:
                 case JOptionPane.CLOSED_OPTION:
                     continuar = false;
                     break;
@@ -212,6 +209,511 @@ public class MenuPrincipal {
                     continuar = false;
                     break;
             }
+        }
+    }
+
+    /**
+     * Muestra los datos almacenados en los tres gestores.
+     */
+    private void mostrarResumenGeneral() {
+
+        String resumen =
+                "=== ENTIDADES REGISTRADAS ===\n"
+                        + gestorEntidades
+                        .generarResumenEntidades()
+                        + "\n\n=== SERVICIOS TURISTICOS ===\n"
+                        + gestorServicios
+                        .generarResumenServicios()
+                        + "\n\n=== RESERVAS ===\n"
+                        + gestorReservas
+                        .generarResumenReservas();
+
+        JOptionPane.showMessageDialog(
+                null,
+                resumen,
+                "Resumen general",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    /**
+     * Solicita los datos necesarios y registra
+     * un nuevo cliente en el sistema.
+     */
+    private void registrarCliente() {
+
+        String titulo = "Registrar cliente";
+
+        String codigo =
+                solicitarDato(
+                        "Ingrese el codigo del cliente:",
+                        titulo
+                );
+
+        if (codigo == null) {
+            return;
+        }
+
+        String rut =
+                solicitarDato(
+                        "Ingrese el RUT:",
+                        titulo
+                );
+
+        if (rut == null) {
+            return;
+        }
+
+        String nombre =
+                solicitarDato(
+                        "Ingrese el nombre:",
+                        titulo
+                );
+
+        if (nombre == null) {
+            return;
+        }
+
+        String apellido =
+                solicitarDato(
+                        "Ingrese el apellido:",
+                        titulo
+                );
+
+        if (apellido == null) {
+            return;
+        }
+
+        String telefono =
+                solicitarDato(
+                        "Ingrese el telefono:",
+                        titulo
+                );
+
+        if (telefono == null) {
+            return;
+        }
+
+        String correo =
+                solicitarDato(
+                        "Ingrese el correo electronico:",
+                        titulo
+                );
+
+        if (correo == null) {
+            return;
+        }
+
+        String calle =
+                solicitarDato(
+                        "Ingrese la calle:",
+                        titulo
+                );
+
+        if (calle == null) {
+            return;
+        }
+
+        String numeroTexto =
+                solicitarDato(
+                        "Ingrese el numero de la direccion:",
+                        titulo
+                );
+
+        if (numeroTexto == null) {
+            return;
+        }
+
+        String comuna =
+                solicitarDato(
+                        "Ingrese la comuna:",
+                        titulo
+                );
+
+        if (comuna == null) {
+            return;
+        }
+
+        String ciudad =
+                solicitarDato(
+                        "Ingrese la ciudad:",
+                        titulo
+                );
+
+        if (ciudad == null) {
+            return;
+        }
+
+        String preferenciaTuristica =
+                solicitarDato(
+                        "Ingrese la preferencia turistica:",
+                        titulo
+                );
+
+        if (preferenciaTuristica == null) {
+            return;
+        }
+
+        try {
+            int numeroDireccion =
+                    Validador.convertirEntero(
+                            numeroTexto,
+                            "El numero de la direccion"
+                    );
+
+            Direccion direccion =
+                    new Direccion(
+                            calle,
+                            numeroDireccion,
+                            comuna,
+                            ciudad
+                    );
+
+            Cliente cliente =
+                    new Cliente(
+                            rut,
+                            nombre,
+                            apellido,
+                            telefono,
+                            correo,
+                            direccion,
+                            codigo,
+                            preferenciaTuristica
+                    );
+
+            gestorEntidades.registrarEntidad(
+                    cliente
+            );
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Cliente registrado correctamente.\n\n"
+                            + cliente.mostrarResumen(),
+                    "Registro exitoso",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (DatoInvalidoException
+                 | RegistroDuplicadoException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Solicita los datos necesarios y registra
+     * un nuevo guia turistico en el sistema.
+     */
+    private void registrarGuiaTuristico() {
+
+        String titulo = "Registrar guia turistico";
+
+        String codigo =
+                solicitarDato(
+                        "Ingrese el codigo del guia:",
+                        titulo
+                );
+
+        if (codigo == null) {
+            return;
+        }
+
+        String rut =
+                solicitarDato(
+                        "Ingrese el RUT:",
+                        titulo
+                );
+
+        if (rut == null) {
+            return;
+        }
+
+        String nombre =
+                solicitarDato(
+                        "Ingrese el nombre:",
+                        titulo
+                );
+
+        if (nombre == null) {
+            return;
+        }
+
+        String apellido =
+                solicitarDato(
+                        "Ingrese el apellido:",
+                        titulo
+                );
+
+        if (apellido == null) {
+            return;
+        }
+
+        String telefono =
+                solicitarDato(
+                        "Ingrese el telefono:",
+                        titulo
+                );
+
+        if (telefono == null) {
+            return;
+        }
+
+        String correo =
+                solicitarDato(
+                        "Ingrese el correo electronico:",
+                        titulo
+                );
+
+        if (correo == null) {
+            return;
+        }
+
+        String calle =
+                solicitarDato(
+                        "Ingrese la calle:",
+                        titulo
+                );
+
+        if (calle == null) {
+            return;
+        }
+
+        String numeroTexto =
+                solicitarDato(
+                        "Ingrese el numero de la direccion:",
+                        titulo
+                );
+
+        if (numeroTexto == null) {
+            return;
+        }
+
+        String comuna =
+                solicitarDato(
+                        "Ingrese la comuna:",
+                        titulo
+                );
+
+        if (comuna == null) {
+            return;
+        }
+
+        String ciudad =
+                solicitarDato(
+                        "Ingrese la ciudad:",
+                        titulo
+                );
+
+        if (ciudad == null) {
+            return;
+        }
+
+        String especialidad =
+                solicitarDato(
+                        "Ingrese la especialidad:",
+                        titulo
+                );
+
+        if (especialidad == null) {
+            return;
+        }
+
+        String experienciaTexto =
+                solicitarDato(
+                        "Ingrese los anios de experiencia:",
+                        titulo
+                );
+
+        if (experienciaTexto == null) {
+            return;
+        }
+
+        String tarifaTexto =
+                solicitarDato(
+                        "Ingrese la tarifa diaria:",
+                        titulo
+                );
+
+        if (tarifaTexto == null) {
+            return;
+        }
+
+        Boolean disponible =
+                solicitarDisponibilidad(
+                        titulo
+                );
+
+        if (disponible == null) {
+            return;
+        }
+
+        try {
+            int numeroDireccion =
+                    Validador.convertirEntero(
+                            numeroTexto,
+                            "El numero de la direccion"
+                    );
+
+            int aniosExperiencia =
+                    Validador.convertirEntero(
+                            experienciaTexto,
+                            "Los anios de experiencia"
+                    );
+
+            double tarifaDiaria =
+                    Validador.convertirDecimal(
+                            tarifaTexto,
+                            "La tarifa diaria"
+                    );
+
+            Direccion direccion =
+                    new Direccion(
+                            calle,
+                            numeroDireccion,
+                            comuna,
+                            ciudad
+                    );
+
+            GuiaTuristico guia =
+                    new GuiaTuristico(
+                            rut,
+                            nombre,
+                            apellido,
+                            telefono,
+                            correo,
+                            direccion,
+                            codigo,
+                            especialidad,
+                            aniosExperiencia,
+                            tarifaDiaria,
+                            disponible
+                    );
+
+            gestorEntidades.registrarEntidad(
+                    guia
+            );
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Guia turistico registrado correctamente.\n\n"
+                            + guia.mostrarResumen(),
+                    "Registro exitoso",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (DatoInvalidoException
+                 | RegistroDuplicadoException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+        }
+    }
+
+    /**
+     * Solicita los datos necesarios y registra
+     * un nuevo vehiculo en el sistema.
+     */
+    private void registrarVehiculo() {
+
+        String titulo = "Registrar vehiculo";
+
+        String patente =
+                solicitarDato(
+                        "Ingrese la patente:",
+                        titulo
+                );
+
+        if (patente == null) {
+            return;
+        }
+
+        String marca =
+                solicitarDato(
+                        "Ingrese la marca:",
+                        titulo
+                );
+
+        if (marca == null) {
+            return;
+        }
+
+        String modelo =
+                solicitarDato(
+                        "Ingrese el modelo:",
+                        titulo
+                );
+
+        if (modelo == null) {
+            return;
+        }
+
+        String tipoVehiculo =
+                solicitarDato(
+                        "Ingrese el tipo de vehiculo:",
+                        titulo
+                );
+
+        if (tipoVehiculo == null) {
+            return;
+        }
+
+        String capacidadTexto =
+                solicitarDato(
+                        "Ingrese la capacidad de pasajeros:",
+                        titulo
+                );
+
+        if (capacidadTexto == null) {
+            return;
+        }
+
+        Boolean disponible =
+                solicitarDisponibilidad(
+                        titulo
+                );
+
+        if (disponible == null) {
+            return;
+        }
+
+        try {
+            int capacidadPasajeros =
+                    Validador.convertirEntero(
+                            capacidadTexto,
+                            "La capacidad de pasajeros"
+                    );
+
+            Vehiculo vehiculo =
+                    new Vehiculo(
+                            patente,
+                            marca,
+                            modelo,
+                            tipoVehiculo,
+                            capacidadPasajeros,
+                            disponible
+                    );
+
+            gestorEntidades.registrarEntidad(
+                    vehiculo
+            );
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Vehiculo registrado correctamente.\n\n"
+                            + vehiculo.mostrarResumen(),
+                    "Registro exitoso",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+        } catch (DatoInvalidoException
+                 | RegistroDuplicadoException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
         }
     }
 
@@ -236,16 +738,62 @@ public class MenuPrincipal {
     }
 
     /**
+     * Busca una entidad mediante su codigo o patente.
+     */
+    private void buscarEntidadPorIdentificador() {
+
+        String identificador =
+                solicitarDato(
+                        "Ingrese el codigo o patente:",
+                        "Buscar entidad"
+                );
+
+        if (identificador == null) {
+            return;
+        }
+
+        if (identificador.isEmpty()) {
+            mostrarError(
+                    "Debe ingresar un codigo o patente."
+            );
+            return;
+        }
+
+        Registrable entidadEncontrada =
+                gestorEntidades.buscarPorIdentificador(
+                        identificador
+                );
+
+        if (entidadEncontrada == null) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "No se encontro una entidad con el identificador "
+                            + identificador + ".",
+                    "Resultado de busqueda",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+            return;
+        }
+
+        JOptionPane.showMessageDialog(
+                null,
+                entidadEncontrada.mostrarResumen(),
+                "Entidad encontrada",
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    /**
      * Busca una persona registrada mediante su RUT.
      */
     private void buscarPersonaPorRut() {
 
         String rut =
-                JOptionPane.showInputDialog(
-                        null,
+                solicitarDato(
                         "Ingrese el RUT de la persona:",
-                        "Buscar persona",
-                        JOptionPane.QUESTION_MESSAGE
+                        "Buscar persona"
                 );
 
         if (rut == null) {
@@ -253,7 +801,6 @@ public class MenuPrincipal {
         }
 
         try {
-
             Persona personaEncontrada =
                     gestorEntidades.buscarPersonaPorRut(
                             rut
@@ -346,7 +893,6 @@ public class MenuPrincipal {
         }
 
         try {
-
             List<Registrable> entidadesFiltradas =
                     gestorEntidades.filtrarPorTipo(
                             tipoBuscado
@@ -409,6 +955,78 @@ public class MenuPrincipal {
     }
 
     /**
+     * Solicita un dato mediante una ventana de entrada.
+     *
+     * @param mensaje mensaje mostrado al usuario
+     * @param titulo titulo de la ventana
+     * @return texto ingresado o null si se cancela
+     */
+    private String solicitarDato(
+            String mensaje,
+            String titulo
+    ) {
+
+        String valor =
+                JOptionPane.showInputDialog(
+                        null,
+                        mensaje,
+                        titulo,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+        if (valor == null) {
+            return null;
+        }
+
+        return valor.trim();
+    }
+
+    /**
+     * Solicita el estado de disponibilidad.
+     *
+     * @param titulo titulo de la ventana
+     * @return true, false o null si se cancela
+     */
+    private Boolean solicitarDisponibilidad(
+            String titulo
+    ) {
+
+        String[] opciones = {
+                "Disponible",
+                "No disponible",
+                "Cancelar"
+        };
+
+        int opcionSeleccionada =
+                JOptionPane.showOptionDialog(
+                        null,
+                        "Seleccione la disponibilidad:",
+                        titulo,
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opciones,
+                        opciones[0]
+                );
+
+        switch (opcionSeleccionada) {
+
+            case 0:
+                return true;
+
+            case 1:
+                return false;
+
+            case 2:
+            case JOptionPane.CLOSED_OPTION:
+                return null;
+
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Informa que un modulo sera implementado
      * en los siguientes pasos.
      *
@@ -443,57 +1061,4 @@ public class MenuPrincipal {
                 JOptionPane.ERROR_MESSAGE
         );
     }
-
-    /**
-     * Busca una entidad mediante su codigo o patente.
-     */
-    private void buscarEntidadPorIdentificador() {
-
-        String identificador =
-                JOptionPane.showInputDialog(
-                        null,
-                        "Ingrese el codigo o patente:",
-                        "Buscar entidad",
-                        JOptionPane.QUESTION_MESSAGE
-                );
-
-        if (identificador == null) {
-            return;
-        }
-
-        identificador = identificador.trim();
-
-        if (identificador.isEmpty()) {
-            mostrarError(
-                    "Debe ingresar un codigo o patente."
-            );
-            return;
-        }
-
-        Registrable entidadEncontrada =
-                gestorEntidades.buscarPorIdentificador(
-                        identificador
-                );
-
-        if (entidadEncontrada == null) {
-
-            JOptionPane.showMessageDialog(
-                    null,
-                    "No se encontro una entidad con el identificador "
-                            + identificador + ".",
-                    "Resultado de busqueda",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-
-            return;
-        }
-
-        JOptionPane.showMessageDialog(
-                null,
-                entidadEncontrada.mostrarResumen(),
-                "Entidad encontrada",
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
 }
