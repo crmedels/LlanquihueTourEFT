@@ -1,9 +1,9 @@
 package service;
 
+import exception.CupoInsuficienteException;
 import exception.DatoInvalidoException;
 import exception.RegistroDuplicadoException;
 import model.Reserva;
-
 import java.util.ArrayList;
 
 /**
@@ -34,7 +34,8 @@ public class GestorReservas {
      */
     public void registrarReserva(Reserva reserva)
             throws DatoInvalidoException,
-            RegistroDuplicadoException {
+            RegistroDuplicadoException,
+            CupoInsuficienteException {
 
         if (reserva == null) {
             throw new DatoInvalidoException(
@@ -48,6 +49,8 @@ public class GestorReservas {
                             + reserva.getCodigoReserva() + "."
             );
         }
+
+        validarCuposDisponibles(reserva);
 
         if (guiaOcupadoEnFecha(reserva)) {
             throw new DatoInvalidoException(
@@ -245,6 +248,86 @@ public class GestorReservas {
         }
 
         return false;
+    }
+
+    /**
+     * Calcula la cantidad de personas ya reservadas
+     * para un servicio en una fecha determinada.
+     *
+     * @param codigoServicio codigo del servicio consultado
+     * @param fecha fecha de realizacion
+     * @return cantidad total de personas reservadas
+     */
+    public int calcularPersonasReservadas(
+            String codigoServicio,
+            String fecha
+    ) {
+
+        int cantidadReservada = 0;
+
+        if (codigoServicio == null || fecha == null) {
+            return cantidadReservada;
+        }
+
+        String codigoBuscado = codigoServicio.trim();
+        String fechaBuscada = fecha.trim();
+
+        for (Reserva reserva : reservas) {
+
+            boolean mismoServicio =
+                    reserva.getServicio()
+                            .getCodigoServicio()
+                            .equalsIgnoreCase(codigoBuscado);
+
+            boolean mismaFecha =
+                    reserva.getFecha()
+                            .equalsIgnoreCase(fechaBuscada);
+
+            if (mismoServicio && mismaFecha) {
+                cantidadReservada +=
+                        reserva.getCantidadPersonas();
+            }
+        }
+
+        return cantidadReservada;
+    }
+
+    /**
+     * Verifica que un servicio tenga cupos suficientes
+     * para registrar una nueva reserva.
+     *
+     * @param nuevaReserva reserva que se desea registrar
+     * @throws CupoInsuficienteException si la cantidad solicitada
+     * supera los cupos disponibles
+     */
+    private void validarCuposDisponibles(
+            Reserva nuevaReserva
+    ) throws CupoInsuficienteException {
+
+        int personasReservadas =
+                calcularPersonasReservadas(
+                        nuevaReserva.getServicio()
+                                .getCodigoServicio(),
+                        nuevaReserva.getFecha()
+                );
+
+        int capacidadMaxima =
+                nuevaReserva.getServicio()
+                        .getCapacidadMaxima();
+
+        int cuposDisponibles =
+                capacidadMaxima - personasReservadas;
+
+        if (nuevaReserva.getCantidadPersonas()
+                > cuposDisponibles) {
+
+            throw new CupoInsuficienteException(
+                    "El servicio solo tiene "
+                            + cuposDisponibles
+                            + " cupos disponibles para la fecha "
+                            + nuevaReserva.getFecha() + "."
+            );
+        }
     }
 
     /**
