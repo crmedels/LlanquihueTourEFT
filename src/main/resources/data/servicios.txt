@@ -1,0 +1,5 @@
+# tipo;codigoServicio;nombre;descripcion;precioBase;duracionHoras;capacidadMaxima;disponible;datoEspecifico1;datoEspecifico2;datoEspecifico3
+RUTA;SER-201;Sabores de Llanquihue;Recorrido por establecimientos de cocina local;25000;4;12;true;Cocina tradicional;3;8000
+RUTA;SER-202;Gastronomia de Frutillar;Ruta por restaurantes y cafeterias de Frutillar;22000;3;10;true;Cocina regional;4;7000
+PASEO;SER-203;Navegacion por el lago;Paseo turistico por el lago Llanquihue;20000;3;15;true;Lago Sur;Lago Llanquihue;10000
+PASEO;SER-204;Recorrido lacustre de Frutillar;Navegacion por el sector costero de Frutillar;18000;2;12;false;Llanquihue;Bahia de Frutillar;9000
