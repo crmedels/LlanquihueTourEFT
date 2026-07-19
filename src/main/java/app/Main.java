@@ -18,6 +18,7 @@ import model.Reserva;
 import service.GestorReservas;
 import data.LectorClientes;
 import data.LectorGuias;
+import data.LectorVehiculos;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -42,6 +43,7 @@ public class Main {
             probarGestorReservas();
             probarCargaClientes();
             probarCargaGuias();
+            probarCargaVehiculos();
 
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException
@@ -675,6 +677,78 @@ public class Main {
                 "Guias encontrados mediante filtro: "
                         + gestorEntidades
                         .filtrarPorTipo("guia")
+                        .size()
+        );
+    }
+
+    /**
+     * Prueba la lectura de vehiculos desde un archivo TXT
+     * y su integracion con el gestor de entidades.
+     *
+     * @throws IOException si el archivo no puede ser leido
+     * @throws DatoInvalidoException si algun dato no es valido
+     * @throws RegistroDuplicadoException si existe una patente repetida
+     */
+    private static void probarCargaVehiculos()
+            throws IOException,
+            DatoInvalidoException,
+            RegistroDuplicadoException {
+
+        LectorVehiculos lectorVehiculos =
+                new LectorVehiculos();
+
+        ArrayList<Vehiculo> vehiculosCargados =
+                lectorVehiculos.cargarVehiculos(
+                        "data/vehiculos.txt"
+                );
+
+        GestorEntidades gestorEntidades =
+                new GestorEntidades();
+
+        for (Vehiculo vehiculo : vehiculosCargados) {
+            gestorEntidades.registrarEntidad(vehiculo);
+        }
+
+        System.out.println(
+                "\n=== VEHICULOS CARGADOS DESDE TXT ==="
+        );
+
+        System.out.println(
+                gestorEntidades.generarResumenEntidades()
+        );
+
+        System.out.println(
+                "Vehiculos cargados correctamente: "
+                        + vehiculosCargados.size()
+        );
+
+        System.out.println(
+                "\n=== BUSQUEDA DE VEHICULO CARGADO ==="
+        );
+
+        Registrable vehiculoEncontrado =
+                gestorEntidades.buscarPorIdentificador(
+                        "RPXC72"
+                );
+
+        if (vehiculoEncontrado != null) {
+            System.out.println(
+                    vehiculoEncontrado.mostrarResumen()
+            );
+        } else {
+            System.out.println(
+                    "No se encontro el vehiculo RPXC72."
+            );
+        }
+
+        System.out.println(
+                "\n=== FILTRO DE VEHICULOS CARGADOS ==="
+        );
+
+        System.out.println(
+                "Vehiculos encontrados mediante filtro: "
+                        + gestorEntidades
+                        .filtrarPorTipo("vehiculo")
                         .size()
         );
     }
