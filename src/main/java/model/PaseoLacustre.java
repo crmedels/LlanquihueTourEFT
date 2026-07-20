@@ -1,6 +1,7 @@
 package model;
 
 import exception.DatoInvalidoException;
+import util.FormateadorMoneda;
 import util.Validador;
 
 /**
@@ -233,8 +234,10 @@ public class PaseoLacustre extends ServicioTuristico {
                 + "\nEmbarcacion: " + nombreEmbarcacion
                 + "\nSector de navegacion: "
                 + sectorNavegacion
-                + "\nCosto de embarcacion por persona: $"
-                + costoEmbarcacionPorPersona
+                + "\nCosto de embarcacion por persona: "
+                + FormateadorMoneda.formatear(
+                costoEmbarcacionPorPersona
+        )
                 + "\nIncluye chaleco salvavidas: "
                 + chaleco;
     }

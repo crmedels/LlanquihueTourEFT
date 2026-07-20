@@ -1,6 +1,7 @@
 package model;
 
 import exception.DatoInvalidoException;
+import util.FormateadorMoneda;
 import util.Validador;
 import interfaces.Registrable;
 
@@ -229,7 +230,8 @@ public class ColaboradorExterno extends Persona
                 + "\n" + super.toString()
                 + "\nCodigo: " + codigoColaborador
                 + "\nTipo de servicio: " + tipoServicio
-                + "\nTarifa por servicio: $" + tarifaPorServicio
+                + "\nTarifa por servicio: "
+                + FormateadorMoneda.formatear(tarifaPorServicio)
                 + "\nEstado: " + estado;
     }
 }

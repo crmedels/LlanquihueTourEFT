@@ -1,6 +1,7 @@
 package model;
 
 import exception.DatoInvalidoException;
+import util.FormateadorMoneda;
 import util.Validador;
 
 /**
@@ -194,7 +195,9 @@ public class RutaGastronomica extends ServicioTuristico {
                 + "\n" + super.toString()
                 + "\nTipo de cocina: " + tipoCocina
                 + "\nCantidad de paradas: " + cantidadParadas
-                + "\nCosto de degustacion por persona: $"
-                + costoDegustacionPorPersona;
+                + "\nCosto de degustacion por persona: "
+                + FormateadorMoneda.formatear(
+                costoDegustacionPorPersona
+        );
     }
 }

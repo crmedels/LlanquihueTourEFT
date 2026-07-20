@@ -2,6 +2,7 @@ package model;
 
 import exception.DatoInvalidoException;
 import interfaces.Registrable;
+import util.FormateadorMoneda;
 import util.Validador;
 
 /**
@@ -265,7 +266,8 @@ public abstract class ServicioTuristico implements Registrable {
 
         return codigoServicio
                 + " | " + nombre
-                + " | Precio base: $" + precioBase
+                + " | Precio base: "
+                + FormateadorMoneda.formatear(precioBase)
                 + " | Capacidad: " + capacidadMaxima
                 + " | " + estado;
     }
@@ -284,7 +286,8 @@ public abstract class ServicioTuristico implements Registrable {
         return "Codigo: " + codigoServicio
                 + "\nNombre: " + nombre
                 + "\nDescripcion: " + descripcion
-                + "\nPrecio base: $" + precioBase
+                + "\nPrecio base: "
+                + FormateadorMoneda.formatear(precioBase)
                 + "\nDuracion: " + duracionHoras + " horas"
                 + "\nCapacidad maxima: " + capacidadMaxima
                 + "\nEstado: " + estado;

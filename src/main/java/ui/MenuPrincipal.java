@@ -18,6 +18,7 @@ import model.Vehiculo;
 import service.GestorEntidades;
 import service.GestorReservas;
 import service.GestorServicios;
+import util.FormateadorMoneda;
 import util.Validador;
 
 import javax.swing.BorderFactory;
@@ -353,8 +354,8 @@ public class MenuPrincipal {
                         + "\n\n=== RESERVAS ===\n"
                         + gestorReservas.generarResumenReservas()
                         + "\n\n=== INGRESOS ===\n"
-                        + "Total: $"
-                        + obtenerMontoSinDecimales(
+                        + "Total: "
+                        + FormateadorMoneda.formatear(
                         gestorReservas.calcularIngresosTotales()
                 );
 
@@ -365,62 +366,93 @@ public class MenuPrincipal {
     }
 
     /**
-     * Registra un cliente desde la interfaz.
+     * Registra un cliente validando cada dato
+     * inmediatamente despues de ser ingresado.
      */
     private void registrarCliente() {
 
         String titulo = "Registrar cliente";
 
-        String[] datos =
-                solicitarDatos(
-                        titulo,
-                        "Ingrese el codigo del cliente:",
-                        "Ingrese el RUT:",
-                        "Ingrese el nombre:",
-                        "Ingrese el apellido:",
-                        "Ingrese el telefono:",
-                        "Ingrese el correo electronico:",
-                        "Ingrese la calle:",
-                        "Ingrese el numero de la direccion:",
-                        "Ingrese la comuna:",
-                        "Ingrese la ciudad:",
-                        "Ingrese la preferencia turistica:"
-                );
+        String codigo = solicitarCodigoEntidadNuevo(
+                "Ingrese el codigo del cliente:",
+                titulo,
+                "CLI-\\d{3,6}",
+                "El codigo del cliente debe tener el formato "
+                        + "CLI seguido de tres a seis numeros.\n"
+                        + "Ejemplo: CLI-001."
+        );
 
-        if (datos == null) {
+        if (codigo == null) {
+            return;
+        }
+
+        String rut = solicitarRutNuevo(titulo);
+
+        if (rut == null) {
+            return;
+        }
+
+        String nombre = solicitarTextoSinNumeros(
+                "Ingrese el nombre:",
+                titulo,
+                "El nombre"
+        );
+
+        if (nombre == null) {
+            return;
+        }
+
+        String apellido = solicitarTextoSinNumeros(
+                "Ingrese el apellido:",
+                titulo,
+                "El apellido"
+        );
+
+        if (apellido == null) {
+            return;
+        }
+
+        String telefono = solicitarTelefonoValido(titulo);
+
+        if (telefono == null) {
+            return;
+        }
+
+        String correo = solicitarCorreoValido(titulo);
+
+        if (correo == null) {
+            return;
+        }
+
+        Direccion direccion = solicitarDireccion(titulo);
+
+        if (direccion == null) {
+            return;
+        }
+
+        String preferencia = solicitarTextoObligatorio(
+                "Ingrese la preferencia turistica:",
+                titulo,
+                "La preferencia turistica"
+        );
+
+        if (preferencia == null) {
             return;
         }
 
         try {
-            int numeroDireccion =
-                    Validador.convertirEntero(
-                            datos[7],
-                            "El numero de la direccion"
-                    );
-
-            Direccion direccion =
-                    new Direccion(
-                            datos[6],
-                            numeroDireccion,
-                            datos[8],
-                            datos[9]
-                    );
-
-            Cliente cliente =
-                    new Cliente(
-                            datos[1],
-                            datos[2],
-                            datos[3],
-                            datos[4],
-                            datos[5],
-                            direccion,
-                            datos[0],
-                            datos[10]
-                    );
-
-            gestorEntidades.registrarEntidad(
-                    cliente
+            Cliente cliente = new Cliente(
+                    rut,
+                    nombre,
+                    apellido,
+                    telefono,
+                    correo,
+                    direccion,
+                    codigo,
+                    preferencia
             );
+
+            gestorEntidades.registrarEntidad(cliente);
 
             mostrarMensaje(
                     "Registro exitoso",
@@ -431,95 +463,127 @@ public class MenuPrincipal {
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException e) {
 
-            mostrarError(
-                    e.getMessage()
-            );
+            mostrarError(e.getMessage());
         }
     }
 
     /**
-     * Registra un guia turistico desde la interfaz.
+     * Registra un guia turistico validando cada dato
+     * inmediatamente despues de ser ingresado.
      */
     private void registrarGuiaTuristico() {
 
         String titulo = "Registrar guia turistico";
 
-        String[] datos =
-                solicitarDatos(
-                        titulo,
-                        "Ingrese el codigo del guia:",
-                        "Ingrese el RUT:",
-                        "Ingrese el nombre:",
-                        "Ingrese el apellido:",
-                        "Ingrese el telefono:",
-                        "Ingrese el correo electronico:",
-                        "Ingrese la calle:",
-                        "Ingrese el numero de la direccion:",
-                        "Ingrese la comuna:",
-                        "Ingrese la ciudad:",
-                        "Ingrese la especialidad:",
-                        "Ingrese los anios de experiencia:",
-                        "Ingrese la tarifa diaria:"
-                );
+        String codigo = solicitarCodigoEntidadNuevo(
+                "Ingrese el codigo del guia:",
+                titulo,
+                "GUI-\\d{3,6}",
+                "El codigo del guia debe tener el formato "
+                        + "GUI seguido de tres a seis numeros.\n"
+                        + "Ejemplo: GUI-001."
+        );
 
-        if (datos == null) {
+        if (codigo == null) {
             return;
         }
 
-        Boolean disponible =
-                solicitarDisponibilidad(
-                        titulo
-                );
+        String rut = solicitarRutNuevo(titulo);
+
+        if (rut == null) {
+            return;
+        }
+
+        String nombre = solicitarTextoSinNumeros(
+                "Ingrese el nombre:",
+                titulo,
+                "El nombre"
+        );
+
+        if (nombre == null) {
+            return;
+        }
+
+        String apellido = solicitarTextoSinNumeros(
+                "Ingrese el apellido:",
+                titulo,
+                "El apellido"
+        );
+
+        if (apellido == null) {
+            return;
+        }
+
+        String telefono = solicitarTelefonoValido(titulo);
+
+        if (telefono == null) {
+            return;
+        }
+
+        String correo = solicitarCorreoValido(titulo);
+
+        if (correo == null) {
+            return;
+        }
+
+        Direccion direccion = solicitarDireccion(titulo);
+
+        if (direccion == null) {
+            return;
+        }
+
+        String especialidad = solicitarTextoObligatorio(
+                "Ingrese la especialidad:",
+                titulo,
+                "La especialidad"
+        );
+
+        if (especialidad == null) {
+            return;
+        }
+
+        Integer aniosExperiencia = solicitarEnteroNoNegativo(
+                "Ingrese los anios de experiencia:",
+                titulo,
+                "Los anios de experiencia"
+        );
+
+        if (aniosExperiencia == null) {
+            return;
+        }
+
+        Double tarifaDiaria = solicitarDecimalPositivo(
+                "Ingrese la tarifa diaria:",
+                titulo,
+                "La tarifa diaria"
+        );
+
+        if (tarifaDiaria == null) {
+            return;
+        }
+
+        Boolean disponible = solicitarDisponibilidad(titulo);
 
         if (disponible == null) {
             return;
         }
 
         try {
-            int numeroDireccion =
-                    Validador.convertirEntero(
-                            datos[7],
-                            "El numero de la direccion"
-                    );
-
-            int aniosExperiencia =
-                    Validador.convertirEntero(
-                            datos[11],
-                            "Los anios de experiencia"
-                    );
-
-            double tarifaDiaria =
-                    Validador.convertirDecimal(
-                            datos[12],
-                            "La tarifa diaria"
-                    );
-
-            Direccion direccion =
-                    new Direccion(
-                            datos[6],
-                            numeroDireccion,
-                            datos[8],
-                            datos[9]
-                    );
-
-            GuiaTuristico guia =
-                    new GuiaTuristico(
-                            datos[1],
-                            datos[2],
-                            datos[3],
-                            datos[4],
-                            datos[5],
-                            direccion,
-                            datos[0],
-                            datos[10],
-                            aniosExperiencia,
-                            tarifaDiaria,
-                            disponible
-                    );
-
-            gestorEntidades.registrarEntidad(
-                    guia
+            GuiaTuristico guia = new GuiaTuristico(
+                    rut,
+                    nombre,
+                    apellido,
+                    telefono,
+                    correo,
+                    direccion,
+                    codigo,
+                    especialidad,
+                    aniosExperiencia,
+                    tarifaDiaria,
+                    disponible
             );
+
+            gestorEntidades.registrarEntidad(guia);
 
             mostrarMensaje(
                     "Registro exitoso",
@@ -530,62 +594,81 @@ public class MenuPrincipal {
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException e) {
 
-            mostrarError(
-                    e.getMessage()
-            );
+            mostrarError(e.getMessage());
         }
     }
 
     /**
-     * Registra un vehiculo desde la interfaz.
+     * Registra un vehiculo validando cada dato
+     * inmediatamente despues de ser ingresado.
      */
     private void registrarVehiculo() {
 
         String titulo = "Registrar vehiculo";
 
-        String[] datos =
-                solicitarDatos(
-                        titulo,
-                        "Ingrese la patente:",
-                        "Ingrese la marca:",
-                        "Ingrese el modelo:",
-                        "Ingrese el tipo de vehiculo:",
-                        "Ingrese la capacidad de pasajeros:"
-                );
+        String patente = solicitarPatenteNueva(titulo);
 
-        if (datos == null) {
+        if (patente == null) {
             return;
         }
 
-        Boolean disponible =
-                solicitarDisponibilidad(
-                        titulo
-                );
+        String marca = solicitarTextoObligatorio(
+                "Ingrese la marca:",
+                titulo,
+                "La marca"
+        );
+
+        if (marca == null) {
+            return;
+        }
+
+        String modelo = solicitarTextoObligatorio(
+                "Ingrese el modelo:",
+                titulo,
+                "El modelo"
+        );
+
+        if (modelo == null) {
+            return;
+        }
+
+        String tipoVehiculo = solicitarTextoObligatorio(
+                "Ingrese el tipo de vehiculo:",
+                titulo,
+                "El tipo de vehiculo"
+        );
+
+        if (tipoVehiculo == null) {
+            return;
+        }
+
+        Integer capacidad = solicitarEnteroPositivo(
+                "Ingrese la capacidad de pasajeros:",
+                titulo,
+                "La capacidad de pasajeros"
+        );
+
+        if (capacidad == null) {
+            return;
+        }
+
+        Boolean disponible = solicitarDisponibilidad(titulo);
 
         if (disponible == null) {
             return;
         }
 
         try {
-            int capacidad =
-                    Validador.convertirEntero(
-                            datos[4],
-                            "La capacidad de pasajeros"
-                    );
-
-            Vehiculo vehiculo =
-                    new Vehiculo(
-                            datos[0],
-                            datos[1],
-                            datos[2],
-                            datos[3],
-                            capacidad,
-                            disponible
-                    );
-
-            gestorEntidades.registrarEntidad(
-                    vehiculo
+            Vehiculo vehiculo = new Vehiculo(
+                    patente,
+                    marca,
+                    modelo,
+                    tipoVehiculo,
+                    capacidad,
+                    disponible
             );
+
+            gestorEntidades.registrarEntidad(vehiculo);
 
             mostrarMensaje(
                     "Registro exitoso",
@@ -596,87 +679,116 @@ public class MenuPrincipal {
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException e) {
 
-            mostrarError(
-                    e.getMessage()
-            );
+            mostrarError(e.getMessage());
         }
     }
 
     /**
-     * Registra un colaborador externo desde la interfaz.
+     * Registra un colaborador externo validando cada dato
+     * inmediatamente despues de ser ingresado.
      */
     private void registrarColaboradorExterno() {
 
         String titulo = "Registrar colaborador externo";
 
-        String[] datos =
-                solicitarDatos(
-                        titulo,
-                        "Ingrese el codigo del colaborador:",
-                        "Ingrese el RUT:",
-                        "Ingrese el nombre:",
-                        "Ingrese el apellido:",
-                        "Ingrese el telefono:",
-                        "Ingrese el correo electronico:",
-                        "Ingrese la calle:",
-                        "Ingrese el numero de la direccion:",
-                        "Ingrese la comuna:",
-                        "Ingrese la ciudad:",
-                        "Ingrese el tipo de servicio:",
-                        "Ingrese la tarifa por servicio:"
-                );
+        String codigo = solicitarCodigoEntidadNuevo(
+                "Ingrese el codigo del colaborador:",
+                titulo,
+                "COL-\\d{3,6}",
+                "El codigo del colaborador debe tener el formato "
+                        + "COL seguido de tres a seis numeros.\n"
+                        + "Ejemplo: COL-001."
+        );
 
-        if (datos == null) {
+        if (codigo == null) {
             return;
         }
 
-        Boolean disponible =
-                solicitarDisponibilidad(
-                        titulo
-                );
+        String rut = solicitarRutNuevo(titulo);
+
+        if (rut == null) {
+            return;
+        }
+
+        String nombre = solicitarTextoSinNumeros(
+                "Ingrese el nombre:",
+                titulo,
+                "El nombre"
+        );
+
+        if (nombre == null) {
+            return;
+        }
+
+        String apellido = solicitarTextoSinNumeros(
+                "Ingrese el apellido:",
+                titulo,
+                "El apellido"
+        );
+
+        if (apellido == null) {
+            return;
+        }
+
+        String telefono = solicitarTelefonoValido(titulo);
+
+        if (telefono == null) {
+            return;
+        }
+
+        String correo = solicitarCorreoValido(titulo);
+
+        if (correo == null) {
+            return;
+        }
+
+        Direccion direccion = solicitarDireccion(titulo);
+
+        if (direccion == null) {
+            return;
+        }
+
+        String tipoServicio = solicitarTextoObligatorio(
+                "Ingrese el tipo de servicio:",
+                titulo,
+                "El tipo de servicio"
+        );
+
+        if (tipoServicio == null) {
+            return;
+        }
+
+        Double tarifa = solicitarDecimalPositivo(
+                "Ingrese la tarifa por servicio:",
+                titulo,
+                "La tarifa por servicio"
+        );
+
+        if (tarifa == null) {
+            return;
+        }
+
+        Boolean disponible = solicitarDisponibilidad(titulo);
 
         if (disponible == null) {
             return;
         }
 
         try {
-            int numeroDireccion =
-                    Validador.convertirEntero(
-                            datos[7],
-                            "El numero de la direccion"
-                    );
-
-            double tarifa =
-                    Validador.convertirDecimal(
-                            datos[11],
-                            "La tarifa por servicio"
-                    );
-
-            Direccion direccion =
-                    new Direccion(
-                            datos[6],
-                            numeroDireccion,
-                            datos[8],
-                            datos[9]
-                    );
-
-            ColaboradorExterno colaborador =
-                    new ColaboradorExterno(
-                            datos[1],
-                            datos[2],
-                            datos[3],
-                            datos[4],
-                            datos[5],
-                            direccion,
-                            datos[0],
-                            datos[10],
-                            tarifa,
-                            disponible
-                    );
-
-            gestorEntidades.registrarEntidad(
-                    colaborador
+            ColaboradorExterno colaborador = new ColaboradorExterno(
+                    rut,
+                    nombre,
+                    apellido,
+                    telefono,
+                    correo,
+                    direccion,
+                    codigo,
+                    tipoServicio,
+                    tarifa,
+                    disponible
             );
+
+            gestorEntidades.registrarEntidad(colaborador);
 
             mostrarMensaje(
                     "Registro exitoso",
@@ -687,94 +799,125 @@ public class MenuPrincipal {
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException e) {
 
-            mostrarError(
-                    e.getMessage()
-            );
+            mostrarError(e.getMessage());
         }
     }
 
     /**
-     * Registra una ruta gastronomica.
+     * Registra una ruta gastronomica validando cada dato
+     * inmediatamente despues de ser ingresado.
      */
     private void registrarRutaGastronomica() {
 
         String titulo = "Registrar ruta gastronomica";
 
-        String[] datos =
-                solicitarDatos(
-                        titulo,
-                        "Ingrese el codigo del servicio:",
-                        "Ingrese el nombre:",
-                        "Ingrese la descripcion:",
-                        "Ingrese el precio base:",
-                        "Ingrese la duracion en horas:",
-                        "Ingrese la capacidad maxima:",
-                        "Ingrese el tipo de cocina:",
-                        "Ingrese la cantidad de paradas:",
-                        "Ingrese el costo de degustacion por persona:"
-                );
+        String codigo = solicitarCodigoServicioNuevo(titulo);
 
-        if (datos == null) {
+        if (codigo == null) {
             return;
         }
 
-        Boolean disponible =
-                solicitarDisponibilidad(
-                        titulo
-                );
+        String nombre = solicitarTextoObligatorio(
+                "Ingrese el nombre:",
+                titulo,
+                "El nombre del servicio"
+        );
+
+        if (nombre == null) {
+            return;
+        }
+
+        String descripcion = solicitarTextoObligatorio(
+                "Ingrese la descripcion:",
+                titulo,
+                "La descripcion del servicio"
+        );
+
+        if (descripcion == null) {
+            return;
+        }
+
+        Double precioBase = solicitarDecimalPositivo(
+                "Ingrese el precio base:",
+                titulo,
+                "El precio base"
+        );
+
+        if (precioBase == null) {
+            return;
+        }
+
+        Integer duracionHoras = solicitarEnteroPositivo(
+                "Ingrese la duracion en horas:",
+                titulo,
+                "La duracion del servicio"
+        );
+
+        if (duracionHoras == null) {
+            return;
+        }
+
+        Integer capacidadMaxima = solicitarEnteroPositivo(
+                "Ingrese la capacidad maxima:",
+                titulo,
+                "La capacidad maxima"
+        );
+
+        if (capacidadMaxima == null) {
+            return;
+        }
+
+        String tipoCocina = solicitarTextoObligatorio(
+                "Ingrese el tipo de cocina:",
+                titulo,
+                "El tipo de cocina"
+        );
+
+        if (tipoCocina == null) {
+            return;
+        }
+
+        Integer cantidadParadas = solicitarEnteroPositivo(
+                "Ingrese la cantidad de paradas:",
+                titulo,
+                "La cantidad de paradas"
+        );
+
+        if (cantidadParadas == null) {
+            return;
+        }
+
+        Double costoDegustacion = solicitarDecimalPositivo(
+                "Ingrese el costo de degustacion por persona:",
+                titulo,
+                "El costo de degustacion por persona"
+        );
+
+        if (costoDegustacion == null) {
+            return;
+        }
+
+        Boolean disponible = solicitarDisponibilidad(titulo);
 
         if (disponible == null) {
             return;
         }
 
         try {
-            double precioBase =
-                    Validador.convertirDecimal(
-                            datos[3],
-                            "El precio base"
-                    );
-
-            int duracionHoras =
-                    Validador.convertirEntero(
-                            datos[4],
-                            "La duracion en horas"
-                    );
-
-            int capacidadMaxima =
-                    Validador.convertirEntero(
-                            datos[5],
-                            "La capacidad maxima"
-                    );
-
-            int cantidadParadas =
-                    Validador.convertirEntero(
-                            datos[7],
-                            "La cantidad de paradas"
-                    );
-
-            double costoDegustacion =
-                    Validador.convertirDecimal(
-                            datos[8],
-                            "El costo de degustacion por persona"
-                    );
-
-            RutaGastronomica ruta =
-                    new RutaGastronomica(
-                            datos[0],
-                            datos[1],
-                            datos[2],
-                            precioBase,
-                            duracionHoras,
-                            capacidadMaxima,
-                            disponible,
-                            datos[6],
-                            cantidadParadas,
-                            costoDegustacion
-                    );
-
-            gestorServicios.registrarServicio(
-                    ruta
+            RutaGastronomica ruta = new RutaGastronomica(
+                    codigo,
+                    nombre,
+                    descripcion,
+                    precioBase,
+                    duracionHoras,
+                    capacidadMaxima,
+                    disponible,
+                    tipoCocina,
+                    cantidadParadas,
+                    costoDegustacion
             );
+
+            gestorServicios.registrarServicio(ruta);
 
             mostrarMensaje(
                     "Registro exitoso",
@@ -785,99 +928,135 @@ public class MenuPrincipal {
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException e) {
 
-            mostrarError(
-                    e.getMessage()
-            );
+            mostrarError(e.getMessage());
         }
     }
 
     /**
-     * Registra un paseo lacustre.
+     * Registra un paseo lacustre validando cada dato
+     * inmediatamente despues de ser ingresado.
      */
     private void registrarPaseoLacustre() {
 
         String titulo = "Registrar paseo lacustre";
 
-        String[] datos =
-                solicitarDatos(
-                        titulo,
-                        "Ingrese el codigo del servicio:",
-                        "Ingrese el nombre:",
-                        "Ingrese la descripcion:",
-                        "Ingrese el precio base:",
-                        "Ingrese la duracion en horas:",
-                        "Ingrese la capacidad maxima:",
-                        "Ingrese el nombre de la embarcacion:",
-                        "Ingrese el sector de navegacion:",
-                        "Ingrese el costo de embarcacion por persona:"
-                );
+        String codigo = solicitarCodigoServicioNuevo(titulo);
 
-        if (datos == null) {
+        if (codigo == null) {
             return;
         }
 
-        Boolean disponible =
-                solicitarDisponibilidad(
-                        titulo
-                );
+        String nombre = solicitarTextoObligatorio(
+                "Ingrese el nombre:",
+                titulo,
+                "El nombre del servicio"
+        );
+
+        if (nombre == null) {
+            return;
+        }
+
+        String descripcion = solicitarTextoObligatorio(
+                "Ingrese la descripcion:",
+                titulo,
+                "La descripcion del servicio"
+        );
+
+        if (descripcion == null) {
+            return;
+        }
+
+        Double precioBase = solicitarDecimalPositivo(
+                "Ingrese el precio base:",
+                titulo,
+                "El precio base"
+        );
+
+        if (precioBase == null) {
+            return;
+        }
+
+        Integer duracionHoras = solicitarEnteroPositivo(
+                "Ingrese la duracion en horas:",
+                titulo,
+                "La duracion del servicio"
+        );
+
+        if (duracionHoras == null) {
+            return;
+        }
+
+        Integer capacidadMaxima = solicitarEnteroPositivo(
+                "Ingrese la capacidad maxima:",
+                titulo,
+                "La capacidad maxima"
+        );
+
+        if (capacidadMaxima == null) {
+            return;
+        }
+
+        String nombreEmbarcacion = solicitarTextoObligatorio(
+                "Ingrese el nombre de la embarcacion:",
+                titulo,
+                "El nombre de la embarcacion"
+        );
+
+        if (nombreEmbarcacion == null) {
+            return;
+        }
+
+        String sectorNavegacion = solicitarTextoObligatorio(
+                "Ingrese el sector de navegacion:",
+                titulo,
+                "El sector de navegacion"
+        );
+
+        if (sectorNavegacion == null) {
+            return;
+        }
+
+        Double costoEmbarcacion = solicitarDecimalPositivo(
+                "Ingrese el costo de embarcacion por persona:",
+                titulo,
+                "El costo de embarcacion por persona"
+        );
+
+        if (costoEmbarcacion == null) {
+            return;
+        }
+
+        Boolean disponible = solicitarDisponibilidad(titulo);
 
         if (disponible == null) {
             return;
         }
 
-        Boolean incluyeChaleco =
-                solicitarConfirmacion(
-                        titulo,
-                        "¿El paseo incluye chaleco salvavidas?"
-                );
+        Boolean incluyeChaleco = solicitarConfirmacion(
+                titulo,
+                "¿El paseo incluye chaleco salvavidas?"
+        );
 
         if (incluyeChaleco == null) {
             return;
         }
 
         try {
-            double precioBase =
-                    Validador.convertirDecimal(
-                            datos[3],
-                            "El precio base"
-                    );
-
-            int duracionHoras =
-                    Validador.convertirEntero(
-                            datos[4],
-                            "La duracion en horas"
-                    );
-
-            int capacidadMaxima =
-                    Validador.convertirEntero(
-                            datos[5],
-                            "La capacidad maxima"
-                    );
-
-            double costoEmbarcacion =
-                    Validador.convertirDecimal(
-                            datos[8],
-                            "El costo de embarcacion por persona"
-                    );
-
-            PaseoLacustre paseo =
-                    new PaseoLacustre(
-                            datos[0],
-                            datos[1],
-                            datos[2],
-                            precioBase,
-                            duracionHoras,
-                            capacidadMaxima,
-                            disponible,
-                            datos[6],
-                            datos[7],
-                            costoEmbarcacion,
-                            incluyeChaleco
-                    );
-
-            gestorServicios.registrarServicio(
-                    paseo
+            PaseoLacustre paseo = new PaseoLacustre(
+                    codigo,
+                    nombre,
+                    descripcion,
+                    precioBase,
+                    duracionHoras,
+                    capacidadMaxima,
+                    disponible,
+                    nombreEmbarcacion,
+                    sectorNavegacion,
+                    costoEmbarcacion,
+                    incluyeChaleco
             );
+
+            gestorServicios.registrarServicio(paseo);
 
             mostrarMensaje(
                     "Registro exitoso",
@@ -888,9 +1067,7 @@ public class MenuPrincipal {
         } catch (DatoInvalidoException
                  | RegistroDuplicadoException e) {
 
-            mostrarError(
-                    e.getMessage()
-            );
+            mostrarError(e.getMessage());
         }
     }
 
@@ -1827,49 +2004,507 @@ public class MenuPrincipal {
                 "Ingresos totales",
                 "Cantidad de reservas: "
                         + gestorReservas.obtenerCantidadReservas()
-                        + "\nIngresos acumulados: $"
-                        + obtenerMontoSinDecimales(
+                        + "\nIngresos acumulados: "
+                        + FormateadorMoneda.formatear(
                         ingresos
                 )
         );
     }
 
+
     /**
-     * Convierte un monto a texto sin decimales.
+     * Solicita un codigo de entidad, valida su formato
+     * y comprueba que no se encuentre registrado.
      */
-    private String obtenerMontoSinDecimales(
-            double monto
+    private String solicitarCodigoEntidadNuevo(
+            String mensaje,
+            String titulo,
+            String formato,
+            String mensajeFormato
     ) {
-        return String.valueOf(
-                Math.round(monto)
-        );
+
+        while (true) {
+
+            String codigo = solicitarDato(
+                    mensaje,
+                    titulo
+            );
+
+            if (codigo == null) {
+                return null;
+            }
+
+            String codigoNormalizado =
+                    codigo.trim().toUpperCase();
+
+            if (!codigoNormalizado.matches(formato)) {
+
+                mostrarError(mensajeFormato);
+                continue;
+            }
+
+            if (gestorEntidades.existeIdentificador(
+                    codigoNormalizado
+            )) {
+
+                mostrarError(
+                        "Ya existe una entidad con el identificador "
+                                + codigoNormalizado + "."
+                );
+
+                continue;
+            }
+
+            return codigoNormalizado;
+        }
     }
 
     /**
-     * Solicita varios datos.
+     * Solicita un codigo de servicio, valida su formato
+     * y comprueba que no se encuentre registrado.
      */
-    private String[] solicitarDatos(
-            String titulo,
-            String... mensajes
+    private String solicitarCodigoServicioNuevo(
+            String titulo
     ) {
 
-        String[] datos =
-                new String[mensajes.length];
+        while (true) {
 
-        for (int i = 0; i < mensajes.length; i++) {
+            String codigo = solicitarDato(
+                    "Ingrese el codigo del servicio:",
+                    titulo
+            );
 
-            datos[i] =
-                    solicitarDato(
-                            mensajes[i],
-                            titulo
-                    );
-
-            if (datos[i] == null) {
+            if (codigo == null) {
                 return null;
             }
+
+            String codigoNormalizado =
+                    codigo.trim().toUpperCase();
+
+            if (!codigoNormalizado.matches("SER-\\d{3,6}")) {
+
+                mostrarError(
+                        "El codigo del servicio debe tener el formato "
+                                + "SER seguido de tres a seis numeros.\n"
+                                + "Ejemplo: SER-001."
+                );
+
+                continue;
+            }
+
+            if (gestorServicios.existeCodigo(
+                    codigoNormalizado
+            )) {
+
+                mostrarError(
+                        "Ya existe un servicio con el codigo "
+                                + codigoNormalizado + "."
+                );
+
+                continue;
+            }
+
+            return codigoNormalizado;
+        }
+    }
+
+    /**
+     * Solicita un RUT valido que no se encuentre registrado.
+     */
+    private String solicitarRutNuevo(
+            String titulo
+    ) {
+
+        while (true) {
+
+            String rut = solicitarDato(
+                    "Ingrese el RUT:",
+                    titulo
+            );
+
+            if (rut == null) {
+                return null;
+            }
+
+            try {
+                String rutNormalizado =
+                        Validador.normalizarRut(rut);
+
+                if (gestorEntidades.existeRut(
+                        rutNormalizado
+                )) {
+
+                    mostrarError(
+                            "Ya existe una persona registrada con el RUT "
+                                    + rutNormalizado + "."
+                    );
+
+                    continue;
+                }
+
+                return rutNormalizado;
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Solicita un telefono valido y lo retorna normalizado.
+     */
+    private String solicitarTelefonoValido(
+            String titulo
+    ) {
+
+        while (true) {
+
+            String telefono = solicitarDato(
+                    "Ingrese el telefono:",
+                    titulo
+            );
+
+            if (telefono == null) {
+                return null;
+            }
+
+            try {
+                return Validador.normalizarTelefono(
+                        telefono
+                );
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Solicita un correo electronico valido.
+     */
+    private String solicitarCorreoValido(
+            String titulo
+    ) {
+
+        while (true) {
+
+            String correo = solicitarDato(
+                    "Ingrese el correo electronico:",
+                    titulo
+            );
+
+            if (correo == null) {
+                return null;
+            }
+
+            try {
+                Validador.validarCorreo(correo);
+                return correo.trim();
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Solicita una patente valida que no se encuentre registrada.
+     */
+    private String solicitarPatenteNueva(
+            String titulo
+    ) {
+
+        while (true) {
+
+            String patente = solicitarDato(
+                    "Ingrese la patente:",
+                    titulo
+            );
+
+            if (patente == null) {
+                return null;
+            }
+
+            try {
+                String patenteNormalizada =
+                        Validador.normalizarPatente(
+                                patente
+                        );
+
+                if (gestorEntidades.existeIdentificador(
+                        patenteNormalizada
+                )) {
+
+                    mostrarError(
+                            "Ya existe un vehiculo con la patente "
+                                    + patenteNormalizada + "."
+                    );
+
+                    continue;
+                }
+
+                return patenteNormalizada;
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Solicita una direccion y valida cada uno de sus campos.
+     */
+    private Direccion solicitarDireccion(
+            String titulo
+    ) {
+
+        String calle = solicitarTextoObligatorio(
+                "Ingrese la calle:",
+                titulo,
+                "La calle"
+        );
+
+        if (calle == null) {
+            return null;
         }
 
-        return datos;
+        Integer numero = solicitarEnteroPositivo(
+                "Ingrese el numero de la direccion:",
+                titulo,
+                "El numero de la direccion"
+        );
+
+        if (numero == null) {
+            return null;
+        }
+
+        String comuna = solicitarTextoSinNumeros(
+                "Ingrese la comuna:",
+                titulo,
+                "La comuna"
+        );
+
+        if (comuna == null) {
+            return null;
+        }
+
+        String ciudad = solicitarTextoSinNumeros(
+                "Ingrese la ciudad:",
+                titulo,
+                "La ciudad"
+        );
+
+        if (ciudad == null) {
+            return null;
+        }
+
+        try {
+            return new Direccion(
+                    calle,
+                    numero,
+                    comuna,
+                    ciudad
+            );
+
+        } catch (DatoInvalidoException e) {
+
+            mostrarError(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Solicita un texto obligatorio.
+     */
+    private String solicitarTextoObligatorio(
+            String mensaje,
+            String titulo,
+            String nombreCampo
+    ) {
+
+        while (true) {
+
+            String valor = solicitarDato(
+                    mensaje,
+                    titulo
+            );
+
+            if (valor == null) {
+                return null;
+            }
+
+            try {
+                Validador.validarTextoObligatorio(
+                        valor,
+                        nombreCampo
+                );
+
+                return valor.trim();
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Solicita un texto compuesto solamente por letras y espacios.
+     */
+    private String solicitarTextoSinNumeros(
+            String mensaje,
+            String titulo,
+            String nombreCampo
+    ) {
+
+        while (true) {
+
+            String valor = solicitarDato(
+                    mensaje,
+                    titulo
+            );
+
+            if (valor == null) {
+                return null;
+            }
+
+            try {
+                Validador.validarTextoSinNumeros(
+                        valor,
+                        nombreCampo
+                );
+
+                return valor.trim();
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Solicita un numero entero mayor que cero.
+     */
+    private Integer solicitarEnteroPositivo(
+            String mensaje,
+            String titulo,
+            String nombreCampo
+    ) {
+
+        while (true) {
+
+            String valor = solicitarDato(
+                    mensaje,
+                    titulo
+            );
+
+            if (valor == null) {
+                return null;
+            }
+
+            try {
+                int numero = Validador.convertirEntero(
+                        valor,
+                        nombreCampo
+                );
+
+                Validador.validarEnteroPositivo(
+                        numero,
+                        nombreCampo
+                );
+
+                return numero;
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Solicita un numero entero igual o mayor que cero.
+     */
+    private Integer solicitarEnteroNoNegativo(
+            String mensaje,
+            String titulo,
+            String nombreCampo
+    ) {
+
+        while (true) {
+
+            String valor = solicitarDato(
+                    mensaje,
+                    titulo
+            );
+
+            if (valor == null) {
+                return null;
+            }
+
+            try {
+                int numero = Validador.convertirEntero(
+                        valor,
+                        nombreCampo
+                );
+
+                Validador.validarEnteroNoNegativo(
+                        numero,
+                        nombreCampo
+                );
+
+                return numero;
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Solicita un numero decimal mayor que cero.
+     */
+    private Double solicitarDecimalPositivo(
+            String mensaje,
+            String titulo,
+            String nombreCampo
+    ) {
+
+        while (true) {
+
+            String valor = solicitarDato(
+                    mensaje,
+                    titulo
+            );
+
+            if (valor == null) {
+                return null;
+            }
+
+            try {
+                double numero = Validador.convertirDecimal(
+                        valor,
+                        nombreCampo
+                );
+
+                Validador.validarDecimalPositivo(
+                        numero,
+                        nombreCampo
+                );
+
+                return numero;
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(e.getMessage());
+            }
+        }
     }
 
     /**

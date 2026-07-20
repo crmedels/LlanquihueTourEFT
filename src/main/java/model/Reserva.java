@@ -2,6 +2,7 @@ package model;
 
 import exception.DatoInvalidoException;
 import interfaces.Registrable;
+import util.FormateadorMoneda;
 import util.Validador;
 
 /**
@@ -351,7 +352,8 @@ public class Reserva implements Registrable {
                 + " | Servicio: " + servicio.getNombre()
                 + " | Fecha: " + fecha
                 + " | Personas: " + cantidadPersonas
-                + " | Total: $" + total;
+                + " | Total: "
+                + FormateadorMoneda.formatear(total);
     }
 
     /**
@@ -372,6 +374,7 @@ public class Reserva implements Registrable {
                 + " " + vehiculo.getModelo()
                 + "\nFecha: " + fecha
                 + "\nCantidad de personas: " + cantidadPersonas
-                + "\nTotal: $" + total;
+                + "\nTotal: "
+                + FormateadorMoneda.formatear(total);
     }
 }

@@ -1,6 +1,7 @@
 package model;
 
 import exception.DatoInvalidoException;
+import util.FormateadorMoneda;
 import util.Validador;
 import interfaces.Registrable;
 
@@ -259,7 +260,8 @@ public class GuiaTuristico extends Persona implements Registrable {
                 + "\nCodigo: " + codigoGuia
                 + "\nEspecialidad: " + especialidad
                 + "\nAnios de experiencia: " + aniosExperiencia
-                + "\nTarifa diaria: $" + tarifaDiaria
+                + "\nTarifa diaria: "
+                + FormateadorMoneda.formatear(tarifaDiaria)
                 + "\nEstado: " + estado;
     }
 }
