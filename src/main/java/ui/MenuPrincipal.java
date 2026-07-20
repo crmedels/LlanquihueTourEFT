@@ -895,100 +895,356 @@ public class MenuPrincipal {
     }
 
     /**
-     * Registra una reserva.
+     * Registra una reserva validando cada dato
+     * inmediatamente despues de ser ingresado.
      */
     private void registrarReserva() {
 
         String titulo = "Registrar reserva";
 
-        String[] datos =
-                solicitarDatos(
-                        titulo,
-                        "Ingrese el codigo de la reserva:",
-                        "Ingrese el codigo del cliente:",
-                        "Ingrese el codigo del servicio:",
-                        "Ingrese el codigo del guia:",
-                        "Ingrese la patente del vehiculo:",
-                        "Ingrese la fecha en formato DD-MM-AAAA:",
-                        "Ingrese la cantidad de personas:"
+        String codigoReserva;
+
+        while (true) {
+
+            codigoReserva =
+                    solicitarDato(
+                            "Ingrese el codigo de la reserva:",
+                            titulo
+                    );
+
+            if (codigoReserva == null) {
+                return;
+            }
+
+            codigoReserva =
+                    codigoReserva.trim().toUpperCase();
+
+            if (!codigoReserva.matches("RES-\\d{3,6}")) {
+
+                mostrarError(
+                        "El codigo de la reserva debe tener el formato "
+                                + "RES seguido de tres a seis numeros.\n"
+                                + "Ejemplo: RES-301."
                 );
 
-        if (datos == null) {
-            return;
+                continue;
+            }
+
+            if (gestorReservas.existeCodigo(codigoReserva)) {
+
+                mostrarError(
+                        "Ya existe una reserva con el codigo "
+                                + codigoReserva + "."
+                );
+
+                continue;
+            }
+
+            break;
         }
 
-        try {
+        Cliente cliente;
+
+        while (true) {
+
+            String codigoCliente =
+                    solicitarDato(
+                            "Ingrese el codigo del cliente:",
+                            titulo
+                    );
+
+            if (codigoCliente == null) {
+                return;
+            }
+
             Registrable entidadCliente =
                     gestorEntidades.buscarPorIdentificador(
-                            datos[1]
+                            codigoCliente
                     );
 
             if (!(entidadCliente instanceof Cliente)) {
-                throw new DatoInvalidoException(
+
+                mostrarError(
                         "No existe un cliente con el codigo "
-                                + datos[1] + "."
+                                + codigoCliente + "."
                 );
+
+                continue;
             }
 
-            ServicioTuristico servicio =
+            cliente = (Cliente) entidadCliente;
+            break;
+        }
+
+        ServicioTuristico servicio;
+
+        while (true) {
+
+            String codigoServicio =
+                    solicitarDato(
+                            "Ingrese el codigo del servicio:",
+                            titulo
+                    );
+
+            if (codigoServicio == null) {
+                return;
+            }
+
+            servicio =
                     gestorServicios.buscarPorCodigo(
-                            datos[2]
+                            codigoServicio
                     );
 
             if (servicio == null) {
-                throw new DatoInvalidoException(
+
+                mostrarError(
                         "No existe un servicio con el codigo "
-                                + datos[2] + "."
+                                + codigoServicio + "."
                 );
+
+                continue;
+            }
+
+            if (!servicio.isDisponible()) {
+
+                mostrarError(
+                        "El servicio seleccionado no esta disponible."
+                );
+
+                continue;
+            }
+
+            break;
+        }
+
+        String fecha;
+
+        while (true) {
+
+            fecha =
+                    solicitarDato(
+                            "Ingrese la fecha en formato DD-MM-AAAA:",
+                            titulo
+                    );
+
+            if (fecha == null) {
+                return;
+            }
+
+            if (!fecha.matches("\\d{2}-\\d{2}-\\d{4}")) {
+
+                mostrarError(
+                        "La fecha debe tener el formato DD-MM-AAAA.\n"
+                                + "Ejemplo: 25-07-2026."
+                );
+
+                continue;
+            }
+
+            String[] partesFecha =
+                    fecha.split("-");
+
+            int dia =
+                    Integer.parseInt(
+                            partesFecha[0]
+                    );
+
+            int mes =
+                    Integer.parseInt(
+                            partesFecha[1]
+                    );
+
+            if (dia < 1 || dia > 31) {
+
+                mostrarError(
+                        "El dia debe estar entre 1 y 31."
+                );
+
+                continue;
+            }
+
+            if (mes < 1 || mes > 12) {
+
+                mostrarError(
+                        "El mes debe estar entre 1 y 12."
+                );
+
+                continue;
+            }
+
+            break;
+        }
+
+        GuiaTuristico guia;
+
+        while (true) {
+
+            String codigoGuia =
+                    solicitarDato(
+                            "Ingrese el codigo del guia:",
+                            titulo
+                    );
+
+            if (codigoGuia == null) {
+                return;
             }
 
             Registrable entidadGuia =
                     gestorEntidades.buscarPorIdentificador(
-                            datos[3]
+                            codigoGuia
                     );
 
             if (!(entidadGuia instanceof GuiaTuristico)) {
-                throw new DatoInvalidoException(
-                        "No existe un guia con el codigo "
-                                + datos[3] + "."
+
+                mostrarError(
+                        "No existe un guia turistico con el codigo "
+                                + codigoGuia + "."
                 );
+
+                continue;
+            }
+
+            guia =
+                    (GuiaTuristico) entidadGuia;
+
+            if (!guia.isDisponible()) {
+
+                mostrarError(
+                        "El guia turistico seleccionado "
+                                + "no esta disponible."
+                );
+
+                continue;
+            }
+
+            break;
+        }
+
+        Vehiculo vehiculo;
+
+        while (true) {
+
+            String patente =
+                    solicitarDato(
+                            "Ingrese la patente del vehiculo:",
+                            titulo
+                    );
+
+            if (patente == null) {
+                return;
             }
 
             Registrable entidadVehiculo =
                     gestorEntidades.buscarPorIdentificador(
-                            datos[4]
+                            patente
                     );
 
             if (!(entidadVehiculo instanceof Vehiculo)) {
-                throw new DatoInvalidoException(
+
+                mostrarError(
                         "No existe un vehiculo con la patente "
-                                + datos[4] + "."
+                                + patente + "."
                 );
+
+                continue;
             }
 
-            int cantidadPersonas =
-                    Validador.convertirEntero(
-                            datos[6],
-                            "La cantidad de personas"
-                    );
-
-            Cliente cliente =
-                    (Cliente) entidadCliente;
-
-            GuiaTuristico guia =
-                    (GuiaTuristico) entidadGuia;
-
-            Vehiculo vehiculo =
+            vehiculo =
                     (Vehiculo) entidadVehiculo;
 
+            if (!vehiculo.isDisponible()) {
+
+                mostrarError(
+                        "El vehiculo seleccionado no esta disponible."
+                );
+
+                continue;
+            }
+
+            break;
+        }
+
+        int cantidadPersonas;
+
+        while (true) {
+
+            String cantidadTexto =
+                    solicitarDato(
+                            "Ingrese la cantidad de personas:",
+                            titulo
+                    );
+
+            if (cantidadTexto == null) {
+                return;
+            }
+
+            try {
+                cantidadPersonas =
+                        Validador.convertirEntero(
+                                cantidadTexto,
+                                "La cantidad de personas"
+                        );
+
+                Validador.validarEnteroPositivo(
+                        cantidadPersonas,
+                        "La cantidad de personas"
+                );
+
+                if (!vehiculo.tieneCapacidadPara(
+                        cantidadPersonas
+                )) {
+
+                    mostrarError(
+                            "El vehiculo no tiene capacidad suficiente "
+                                    + "para " + cantidadPersonas
+                                    + " personas."
+                    );
+
+                    continue;
+                }
+
+                int personasReservadas =
+                        gestorReservas
+                                .calcularPersonasReservadas(
+                                        servicio.getCodigoServicio(),
+                                        fecha
+                                );
+
+                int cuposDisponibles =
+                        servicio.getCapacidadMaxima()
+                                - personasReservadas;
+
+                if (cantidadPersonas > cuposDisponibles) {
+
+                    mostrarError(
+                            "El servicio solo tiene "
+                                    + cuposDisponibles
+                                    + " cupos disponibles para la fecha "
+                                    + fecha + "."
+                    );
+
+                    continue;
+                }
+
+                break;
+
+            } catch (DatoInvalidoException e) {
+
+                mostrarError(
+                        e.getMessage()
+                );
+            }
+        }
+
+        try {
             Reserva reserva =
                     new Reserva(
-                            datos[0],
+                            codigoReserva,
                             cliente,
                             servicio,
                             guia,
                             vehiculo,
-                            datos[5],
+                            fecha,
                             cantidadPersonas
                     );
 
