@@ -4,45 +4,83 @@ Proyecto desarrollado para la Evaluación Final Transversal de la asignatura Des
 
 ## Descripción
 
-El proyecto consiste en un prototipo de software para la agencia de turismo Llanquihue Tour. Su objetivo es organizar y gestionar las principales entidades de la empresa mediante una solución modular desarrollada en Java y basada en los principios de la Programación Orientada a Objetos.
+Llanquihue Tour EFT es un prototipo de sistema desarrollado en Java para gestionar las principales operaciones de una agencia de turismo.
 
-## Funcionalidades planificadas
+La aplicación permite administrar clientes, guías turísticos, colaboradores externos, vehículos, servicios turísticos y reservas. El proyecto utiliza una estructura modular y aplica los principales fundamentos de la Programación Orientada a Objetos.
 
-- Gestión de personas.
-- Gestión de guías turísticos.
-- Gestión de colaboradores externos.
-- Gestión de proveedores de transporte.
-- Gestión de vehículos.
-- Gestión de servicios turísticos.
-- Gestión de reservas.
-- Lectura de datos desde archivos externos.
-- Búsqueda y filtrado de registros.
-- Validación de datos.
-- Prevención de registros duplicados.
+## Funcionalidades implementadas
 
-## Principios de programación orientada a objetos
+- Registro de clientes.
+- Registro de guías turísticos.
+- Registro de colaboradores externos.
+- Registro de vehículos.
+- Registro de rutas gastronómicas.
+- Registro de paseos lacustres.
+- Registro y gestión de reservas.
+- Búsqueda de entidades por identificador.
+- Búsqueda de personas por RUT.
+- Búsqueda de servicios y reservas por código.
+- Búsqueda de reservas por RUT del cliente.
+- Búsqueda de reservas por fecha.
+- Filtrado de entidades y servicios por tipo.
+- Lectura de datos iniciales desde archivos TXT.
+- Cálculo polimórfico del precio de los servicios.
+- Cálculo de ingresos acumulados.
+- Control de cupos disponibles.
+- Control de disponibilidad de guías y vehículos.
+- Prevención de códigos, RUT y patentes duplicadas.
+- Validación inmediata de los datos ingresados.
+- Interfaz gráfica desarrollada con Swing.
 
-El sistema aplicará:
+## Programación Orientada a Objetos
 
-- Encapsulamiento.
-- Composición.
-- Herencia.
-- Polimorfismo.
-- Interfaces.
-- Colecciones de objetos.
-- Excepciones personalizadas.
+El proyecto aplica los siguientes principios:
 
-## Tecnologías
+### Encapsulamiento
 
-- Java 26.
-- Maven.
-- IntelliJ IDEA.
-- Git y GitHub.
+Los atributos de las clases se encuentran declarados como privados y son administrados mediante constructores, métodos de acceso y métodos de modificación.
 
-## Estado del proyecto
+### Composición
 
-Proyecto en desarrollo.
+La clase `Persona` contiene un objeto de tipo `Direccion`, representando la relación entre una persona y su dirección.
 
-## Autor
+### Herencia
 
-Cristofer Medel
+Las clases `Cliente`, `GuiaTuristico` y `ColaboradorExterno` heredan los atributos y comportamientos comunes de la clase `Persona`.
+
+Las clases `RutaGastronomica` y `PaseoLacustre` heredan de la clase abstracta `ServicioTuristico`.
+
+### Polimorfismo
+
+Los servicios turísticos implementan diferentes formas de calcular su precio mediante la sobrescritura del método `calcularPrecio`.
+
+Las entidades registrables son almacenadas y procesadas mediante referencias de tipo `Registrable`.
+
+### Interfaces
+
+La interfaz `Registrable` establece los métodos necesarios para obtener el identificador y mostrar el resumen de cada entidad.
+
+### Excepciones personalizadas
+
+El sistema utiliza excepciones propias para controlar datos inválidos, registros duplicados y falta de cupos disponibles.
+
+## Estructura del proyecto
+
+```text
+src/main/java
+├── app
+│   └── Punto de entrada de la aplicación
+├── data
+│   └── Lectura y carga de archivos externos
+├── exception
+│   └── Excepciones personalizadas
+├── interfaces
+│   └── Contratos de comportamiento
+├── model
+│   └── Entidades y servicios del dominio
+├── service
+│   └── Gestores y lógica de negocio
+├── ui
+│   └── Menús y formularios gráficos
+└── util
+    └── Validaciones y funciones auxiliares
