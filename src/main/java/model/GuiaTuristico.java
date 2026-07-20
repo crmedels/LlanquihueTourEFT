@@ -211,7 +211,7 @@ public class GuiaTuristico extends Persona implements Registrable {
 
         Validador.validarEnteroPositivo(
                 cantidadDias,
-                "La cantidad de dias"
+                "La cantidad de días"
         );
 
         return tarifaDiaria * cantidadDias;

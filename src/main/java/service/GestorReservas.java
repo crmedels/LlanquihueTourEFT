@@ -45,7 +45,7 @@ public class GestorReservas {
 
         if (existeCodigo(reserva.getCodigoReserva())) {
             throw new RegistroDuplicadoException(
-                    "Ya existe una reserva con el codigo "
+                    "Ya existe una reserva con el código "
                             + reserva.getCodigoReserva() + "."
             );
         }

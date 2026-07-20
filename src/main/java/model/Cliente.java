@@ -111,7 +111,7 @@ public class Cliente extends Persona implements Registrable {
 
         Validador.validarTextoObligatorio(
                 preferenciaTuristica,
-                "La preferencia turistica"
+                "La preferencia turística"
         );
 
         this.preferenciaTuristica =

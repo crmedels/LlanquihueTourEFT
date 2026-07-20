@@ -146,7 +146,7 @@ public class MenuPrincipal {
 
         String[] opciones = {
                 "Registrar cliente",
-                "Registrar guia turistico",
+                "Registrar guia turístico",
                 "Registrar vehiculo",
                 "Registrar colaborador externo",
                 "Listar todas",
@@ -374,7 +374,7 @@ public class MenuPrincipal {
         String titulo = "Registrar cliente";
 
         String codigo = solicitarCodigoEntidadNuevo(
-                "Ingrese el codigo del cliente:",
+                "Ingrese el código del cliente:",
                 titulo,
                 "CLI-\\d{3,6}",
                 "El código del cliente debe tener el formato "
@@ -692,7 +692,7 @@ public class MenuPrincipal {
         String titulo = "Registrar colaborador externo";
 
         String codigo = solicitarCodigoEntidadNuevo(
-                "Ingrese el codigo del colaborador:",
+                "Ingrese el código del colaborador:",
                 titulo,
                 "COL-\\d{3,6}",
                 "El código del colaborador debe tener el formato "
@@ -1099,7 +1099,7 @@ public class MenuPrincipal {
             if (!codigoReserva.matches("RES-\\d{3,6}")) {
 
                 mostrarError(
-                        "El codigo de la reserva debe tener el formato "
+                        "El código de la reserva debe tener el formato "
                                 + "RES seguido de tres a seis números.\n"
                                 + "Ejemplo: RES-301."
                 );
@@ -2084,7 +2084,7 @@ public class MenuPrincipal {
             if (!codigoNormalizado.matches("SER-\\d{3,6}")) {
 
                 mostrarError(
-                        "El codigo del servicio debe tener el formato "
+                        "El código del servicio debe tener el formato "
                                 + "SER seguido de tres a seis números.\n"
                                 + "Ejemplo: SER-001."
                 );
