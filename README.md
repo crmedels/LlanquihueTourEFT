@@ -1,86 +1,132 @@
 # Llanquihue Tour EFT
 
-Proyecto desarrollado para la Evaluación Final Transversal de la asignatura Desarrollo Orientado a Objetos I.
+Proyecto desarrollado para la Evaluacion Final Transversal de la asignatura Desarrollo Orientado a Objetos I.
 
-## Descripción
+## Descripcion
 
 Llanquihue Tour EFT es un prototipo de sistema desarrollado en Java para gestionar las principales operaciones de una agencia de turismo.
 
-La aplicación permite administrar clientes, guías turísticos, colaboradores externos, vehículos, servicios turísticos y reservas. El proyecto utiliza una estructura modular y aplica los principales fundamentos de la Programación Orientada a Objetos.
+La aplicacion permite administrar clientes, guias turisticos, colaboradores externos, vehiculos, servicios turisticos y reservas. El proyecto utiliza una estructura modular y aplica los principales fundamentos de la Programacion Orientada a Objetos.
 
 ## Funcionalidades implementadas
 
 - Registro de clientes.
-- Registro de guías turísticos.
+- Registro de guias turisticos.
 - Registro de colaboradores externos.
-- Registro de vehículos.
-- Registro de rutas gastronómicas.
+- Registro de vehiculos.
+- Registro de rutas gastronomicas.
 - Registro de paseos lacustres.
-- Registro y gestión de reservas.
-- Búsqueda de entidades por identificador.
-- Búsqueda de personas por RUT.
-- Búsqueda de servicios y reservas por código.
-- Búsqueda de reservas por RUT del cliente.
-- Búsqueda de reservas por fecha.
+- Registro y gestion de reservas.
+- Busqueda de entidades por identificador.
+- Busqueda de personas por RUT.
+- Busqueda de servicios y reservas por codigo.
+- Busqueda de reservas por RUT del cliente.
+- Busqueda de reservas por fecha.
 - Filtrado de entidades y servicios por tipo.
 - Lectura de datos iniciales desde archivos TXT.
-- Cálculo polimórfico del precio de los servicios.
-- Cálculo de ingresos acumulados.
+- Calculo polimorfico del precio de los servicios.
+- Calculo de ingresos acumulados.
 - Control de cupos disponibles.
-- Control de disponibilidad de guías y vehículos.
-- Prevención de códigos, RUT y patentes duplicadas.
-- Validación inmediata de los datos ingresados.
-- Interfaz gráfica desarrollada con Swing.
+- Control de disponibilidad de guias y vehiculos.
+- Prevencion de codigos, RUT y patentes duplicadas.
+- Validacion inmediata de datos durante el registro.
+- Presentacion de montos con separadores de miles.
+- Interfaz grafica desarrollada con Java Swing.
 
-## Programación Orientada a Objetos
-
-El proyecto aplica los siguientes principios:
+## Programacion Orientada a Objetos
 
 ### Encapsulamiento
 
-Los atributos de las clases se encuentran declarados como privados y son administrados mediante constructores, métodos de acceso y métodos de modificación.
+Los atributos se encuentran declarados como privados y son administrados mediante constructores, metodos de acceso y metodos de modificacion.
 
-### Composición
+### Composicion
 
-La clase `Persona` contiene un objeto de tipo `Direccion`, representando la relación entre una persona y su dirección.
+La clase `Persona` contiene un objeto de tipo `Direccion`, representando la relacion entre una persona y su direccion.
 
 ### Herencia
 
-Las clases `Cliente`, `GuiaTuristico` y `ColaboradorExterno` heredan los atributos y comportamientos comunes de la clase `Persona`.
+Las clases `Cliente`, `GuiaTuristico` y `ColaboradorExterno` heredan los datos y comportamientos comunes de `Persona`.
 
 Las clases `RutaGastronomica` y `PaseoLacustre` heredan de la clase abstracta `ServicioTuristico`.
 
 ### Polimorfismo
 
-Los servicios turísticos implementan diferentes formas de calcular su precio mediante la sobrescritura del método `calcularPrecio`.
+Los servicios turisticos sobrescriben el metodo `calcularPrecio(int cantidadPersonas)` para aplicar su propio calculo.
 
-Las entidades registrables son almacenadas y procesadas mediante referencias de tipo `Registrable`.
+Las entidades se almacenan y procesan mediante referencias de tipo `Registrable`.
 
 ### Interfaces
 
-La interfaz `Registrable` establece los métodos necesarios para obtener el identificador y mostrar el resumen de cada entidad.
+La interfaz `Registrable` establece los metodos necesarios para obtener el identificador y mostrar un resumen de cada entidad.
 
 ### Excepciones personalizadas
 
-El sistema utiliza excepciones propias para controlar datos inválidos, registros duplicados y falta de cupos disponibles.
+El sistema utiliza excepciones propias para controlar datos invalidos, registros duplicados y falta de cupos disponibles.
 
 ## Estructura del proyecto
 
 ```text
 src/main/java
 ├── app
-│   └── Punto de entrada de la aplicación
 ├── data
-│   └── Lectura y carga de archivos externos
 ├── exception
-│   └── Excepciones personalizadas
 ├── interfaces
-│   └── Contratos de comportamiento
 ├── model
-│   └── Entidades y servicios del dominio
 ├── service
-│   └── Gestores y lógica de negocio
 ├── ui
-│   └── Menús y formularios gráficos
 └── util
-    └── Validaciones y funciones auxiliares
+```
+
+- `app`: punto de entrada de la aplicacion.
+- `data`: lectura y carga de archivos externos.
+- `exception`: excepciones personalizadas.
+- `interfaces`: contratos de comportamiento.
+- `model`: entidades y servicios del dominio.
+- `service`: gestores y logica de negocio.
+- `ui`: menus y formularios graficos.
+- `util`: validaciones y funciones auxiliares.
+
+## Archivos de datos
+
+Los datos iniciales se cargan desde `src/main/resources` mediante los siguientes archivos:
+
+- `clientes.txt`
+- `guias.txt`
+- `vehiculos.txt`
+- `servicios.txt`
+
+Los campos se encuentran separados por punto y coma.
+
+## Tecnologias utilizadas
+
+- Java 26.
+- Maven.
+- Java Swing.
+- IntelliJ IDEA.
+- Git y GitHub.
+
+## Ejecucion desde IntelliJ IDEA
+
+1. Abrir el proyecto.
+2. Esperar que Maven cargue la estructura.
+3. Abrir `src/main/java/app/Main.java`.
+4. Ejecutar el metodo `main`.
+5. Utilizar los menus graficos para acceder a los modulos.
+
+## Compilacion con Maven
+
+Desde la ventana Maven de IntelliJ IDEA:
+
+```text
+Lifecycle -> clean
+Lifecycle -> compile
+Lifecycle -> package
+```
+
+El archivo generado se almacena en la carpeta `target`.
+
+## Autor
+
+Cristofer Medel  
+Estudiante de Analista Programador Computacional  
+Duoc UC
