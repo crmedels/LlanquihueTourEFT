@@ -44,7 +44,7 @@ public class LectorVehiculos {
 
         if (flujoEntrada == null) {
             throw new IOException(
-                    "No se encontro el archivo: "
+                    "No se encontró el archivo: "
                             + rutaRecurso
             );
         }

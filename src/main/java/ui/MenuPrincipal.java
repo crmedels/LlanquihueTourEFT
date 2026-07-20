@@ -100,7 +100,7 @@ public class MenuPrincipal {
             int opcion =
                     mostrarMenuVertical(
                             "Llanquihue Tour",
-                            "Seleccione una opcion:",
+                            "Seleccione una opción:",
                             opciones
                     );
 
@@ -163,7 +163,7 @@ public class MenuPrincipal {
             int opcion =
                     mostrarMenuVertical(
                             "Gestion de entidades",
-                            "Seleccione una opcion:",
+                            "Seleccione una opción:",
                             opciones
                     );
 
@@ -219,10 +219,10 @@ public class MenuPrincipal {
     private void mostrarMenuServicios() {
 
         String[] opciones = {
-                "Registrar ruta gastronomica",
+                "Registrar ruta gastronómica",
                 "Registrar paseo lacustre",
                 "Listar todos",
-                "Buscar por codigo",
+                "Buscar por código",
                 "Filtrar por tipo",
                 "Volver"
         };
@@ -234,7 +234,7 @@ public class MenuPrincipal {
             int opcion =
                     mostrarMenuVertical(
                             "Gestion de servicios",
-                            "Seleccione una opcion:",
+                            "Seleccione una opción:",
                             opciones
                     );
 
@@ -281,7 +281,7 @@ public class MenuPrincipal {
                 "Registrar reserva",
                 "Ver datos disponibles",
                 "Listar todas",
-                "Buscar por codigo",
+                "Buscar por código",
                 "Buscar por RUT del cliente",
                 "Buscar por fecha",
                 "Ver ingresos totales",
@@ -295,7 +295,7 @@ public class MenuPrincipal {
             int opcion =
                     mostrarMenuVertical(
                             "Gestion de reservas",
-                            "Seleccione una opcion:",
+                            "Seleccione una opción:",
                             opciones
                     );
 
@@ -377,8 +377,8 @@ public class MenuPrincipal {
                 "Ingrese el codigo del cliente:",
                 titulo,
                 "CLI-\\d{3,6}",
-                "El codigo del cliente debe tener el formato "
-                        + "CLI seguido de tres a seis numeros.\n"
+                "El código del cliente debe tener el formato "
+                        + "CLI seguido de tres a seis números.\n"
                         + "Ejemplo: CLI-001."
         );
 
@@ -431,9 +431,9 @@ public class MenuPrincipal {
         }
 
         String preferencia = solicitarTextoObligatorio(
-                "Ingrese la preferencia turistica:",
+                "Ingrese la preferencia turística:",
                 titulo,
-                "La preferencia turistica"
+                "La preferencia turística"
         );
 
         if (preferencia == null) {
@@ -473,14 +473,14 @@ public class MenuPrincipal {
      */
     private void registrarGuiaTuristico() {
 
-        String titulo = "Registrar guia turistico";
+        String titulo = "Registrar guia turístico";
 
         String codigo = solicitarCodigoEntidadNuevo(
                 "Ingrese el codigo del guia:",
                 titulo,
                 "GUI-\\d{3,6}",
-                "El codigo del guia debe tener el formato "
-                        + "GUI seguido de tres a seis numeros.\n"
+                "El código del guia debe tener el formato "
+                        + "GUI seguido de tres a seis números.\n"
                         + "Ejemplo: GUI-001."
         );
 
@@ -543,9 +543,9 @@ public class MenuPrincipal {
         }
 
         Integer aniosExperiencia = solicitarEnteroNoNegativo(
-                "Ingrese los anios de experiencia:",
+                "Ingrese los años de experiencia:",
                 titulo,
-                "Los anios de experiencia"
+                "Los años de experiencia"
         );
 
         if (aniosExperiencia == null) {
@@ -587,7 +587,7 @@ public class MenuPrincipal {
 
             mostrarMensaje(
                     "Registro exitoso",
-                    "Guia turistico registrado correctamente.\n\n"
+                    "Guia turístico registrado correctamente.\n\n"
                             + guia.mostrarResumen()
             );
 
@@ -695,8 +695,8 @@ public class MenuPrincipal {
                 "Ingrese el codigo del colaborador:",
                 titulo,
                 "COL-\\d{3,6}",
-                "El codigo del colaborador debe tener el formato "
-                        + "COL seguido de tres a seis numeros.\n"
+                "El código del colaborador debe tener el formato "
+                        + "COL seguido de tres a seis números.\n"
                         + "Ejemplo: COL-001."
         );
 
@@ -809,7 +809,7 @@ public class MenuPrincipal {
      */
     private void registrarRutaGastronomica() {
 
-        String titulo = "Registrar ruta gastronomica";
+        String titulo = "Registrar ruta gastronómica";
 
         String codigo = solicitarCodigoServicioNuevo(titulo);
 
@@ -828,9 +828,9 @@ public class MenuPrincipal {
         }
 
         String descripcion = solicitarTextoObligatorio(
-                "Ingrese la descripcion:",
+                "Ingrese la descripción:",
                 titulo,
-                "La descripcion del servicio"
+                "La descripción del servicio"
         );
 
         if (descripcion == null) {
@@ -848,9 +848,9 @@ public class MenuPrincipal {
         }
 
         Integer duracionHoras = solicitarEnteroPositivo(
-                "Ingrese la duracion en horas:",
+                "Ingrese la duración en horas:",
                 titulo,
-                "La duracion del servicio"
+                "La duración del servicio"
         );
 
         if (duracionHoras == null) {
@@ -888,9 +888,9 @@ public class MenuPrincipal {
         }
 
         Double costoDegustacion = solicitarDecimalPositivo(
-                "Ingrese el costo de degustacion por persona:",
+                "Ingrese el costo de degustación por persona:",
                 titulo,
-                "El costo de degustacion por persona"
+                "El costo de degustación por persona"
         );
 
         if (costoDegustacion == null) {
@@ -921,7 +921,7 @@ public class MenuPrincipal {
 
             mostrarMensaje(
                     "Registro exitoso",
-                    "Ruta gastronomica registrada correctamente.\n\n"
+                    "Ruta gastronómica registrada correctamente.\n\n"
                             + ruta.mostrarResumen()
             );
 
@@ -957,9 +957,9 @@ public class MenuPrincipal {
         }
 
         String descripcion = solicitarTextoObligatorio(
-                "Ingrese la descripcion:",
+                "Ingrese la descripción:",
                 titulo,
-                "La descripcion del servicio"
+                "La descripción del servicio"
         );
 
         if (descripcion == null) {
@@ -977,9 +977,9 @@ public class MenuPrincipal {
         }
 
         Integer duracionHoras = solicitarEnteroPositivo(
-                "Ingrese la duracion en horas:",
+                "Ingrese la duración en horas:",
                 titulo,
-                "La duracion del servicio"
+                "La duración del servicio"
         );
 
         if (duracionHoras == null) {
@@ -997,9 +997,9 @@ public class MenuPrincipal {
         }
 
         String nombreEmbarcacion = solicitarTextoObligatorio(
-                "Ingrese el nombre de la embarcacion:",
+                "Ingrese el nombre de la embarcación:",
                 titulo,
-                "El nombre de la embarcacion"
+                "El nombre de la embarcación"
         );
 
         if (nombreEmbarcacion == null) {
@@ -1007,9 +1007,9 @@ public class MenuPrincipal {
         }
 
         String sectorNavegacion = solicitarTextoObligatorio(
-                "Ingrese el sector de navegacion:",
+                "Ingrese el sector de navegación:",
                 titulo,
-                "El sector de navegacion"
+                "El sector de navegación"
         );
 
         if (sectorNavegacion == null) {
@@ -1017,9 +1017,9 @@ public class MenuPrincipal {
         }
 
         Double costoEmbarcacion = solicitarDecimalPositivo(
-                "Ingrese el costo de embarcacion por persona:",
+                "Ingrese el costo de embarcación por persona:",
                 titulo,
-                "El costo de embarcacion por persona"
+                "El costo de embarcación por persona"
         );
 
         if (costoEmbarcacion == null) {
@@ -1085,7 +1085,7 @@ public class MenuPrincipal {
 
             codigoReserva =
                     solicitarDato(
-                            "Ingrese el codigo de la reserva:",
+                            "Ingrese el código de la reserva:",
                             titulo
                     );
 
@@ -1100,7 +1100,7 @@ public class MenuPrincipal {
 
                 mostrarError(
                         "El codigo de la reserva debe tener el formato "
-                                + "RES seguido de tres a seis numeros.\n"
+                                + "RES seguido de tres a seis números.\n"
                                 + "Ejemplo: RES-301."
                 );
 
@@ -1110,7 +1110,7 @@ public class MenuPrincipal {
             if (gestorReservas.existeCodigo(codigoReserva)) {
 
                 mostrarError(
-                        "Ya existe una reserva con el codigo "
+                        "Ya existe una reserva con el código "
                                 + codigoReserva + "."
                 );
 
@@ -1126,7 +1126,7 @@ public class MenuPrincipal {
 
             String codigoCliente =
                     solicitarDato(
-                            "Ingrese el codigo del cliente:",
+                            "Ingrese el código del cliente:",
                             titulo
                     );
 
@@ -1142,7 +1142,7 @@ public class MenuPrincipal {
             if (!(entidadCliente instanceof Cliente)) {
 
                 mostrarError(
-                        "No existe un cliente con el codigo "
+                        "No existe un cliente con el código "
                                 + codigoCliente + "."
                 );
 
@@ -1159,7 +1159,7 @@ public class MenuPrincipal {
 
             String codigoServicio =
                     solicitarDato(
-                            "Ingrese el codigo del servicio:",
+                            "Ingrese el código del servicio:",
                             titulo
                     );
 
@@ -1175,7 +1175,7 @@ public class MenuPrincipal {
             if (servicio == null) {
 
                 mostrarError(
-                        "No existe un servicio con el codigo "
+                        "No existe un servicio con el código "
                                 + codigoServicio + "."
                 );
 
@@ -1258,7 +1258,7 @@ public class MenuPrincipal {
 
             String codigoGuia =
                     solicitarDato(
-                            "Ingrese el codigo del guia:",
+                            "Ingrese el código del guia:",
                             titulo
                     );
 
@@ -1274,7 +1274,7 @@ public class MenuPrincipal {
             if (!(entidadGuia instanceof GuiaTuristico)) {
 
                 mostrarError(
-                        "No existe un guia turistico con el codigo "
+                        "No existe un guia turístico con el código "
                                 + codigoGuia + "."
                 );
 
@@ -1287,7 +1287,7 @@ public class MenuPrincipal {
             if (!guia.isDisponible()) {
 
                 mostrarError(
-                        "El guia turistico seleccionado "
+                        "El guia turístico seleccionado "
                                 + "no esta disponible."
                 );
 
@@ -1487,7 +1487,7 @@ public class MenuPrincipal {
 
         String identificador =
                 solicitarDato(
-                        "Ingrese el codigo o patente:",
+                        "Ingrese el código o patente:",
                         "Buscar entidad"
                 );
 
@@ -1498,7 +1498,7 @@ public class MenuPrincipal {
         if (identificador.isEmpty()) {
 
             mostrarError(
-                    "Debe ingresar un codigo o patente."
+                    "Debe ingresar un código o patente."
             );
 
             return;
@@ -1512,8 +1512,8 @@ public class MenuPrincipal {
         if (entidad == null) {
 
             mostrarMensaje(
-                    "Resultado de busqueda",
-                    "No se encontro una entidad con el identificador "
+                    "Resultado de búsqueda",
+                    "No se encontró una entidad con el identificador "
                             + identificador + "."
             );
 
@@ -1550,8 +1550,8 @@ public class MenuPrincipal {
             if (persona == null) {
 
                 mostrarMensaje(
-                        "Resultado de busqueda",
-                        "No se encontro una persona con el RUT indicado."
+                        "Resultado de búsqueda",
+                        "No se encontró una persona con el RUT indicado."
                 );
 
                 return;
@@ -1577,9 +1577,9 @@ public class MenuPrincipal {
 
         String[] opciones = {
                 "Clientes",
-                "Guias turisticos",
+                "Guias turísticos",
                 "Colaboradores externos",
-                "Vehiculos",
+                "Vehículos",
                 "Cancelar"
         };
 
@@ -1602,7 +1602,7 @@ public class MenuPrincipal {
 
             case 1:
                 tipo = "guia";
-                titulo = "Guias turisticos registrados";
+                titulo = "Guias turísticos registrados";
                 break;
 
             case 2:
@@ -1612,7 +1612,7 @@ public class MenuPrincipal {
 
             case 3:
                 tipo = "vehiculo";
-                titulo = "Vehiculos registrados";
+                titulo = "Vehículos registrados";
                 break;
 
             case 4:
@@ -1684,11 +1684,11 @@ public class MenuPrincipal {
                 gestorServicios.generarResumenServicios();
 
         if (resumen == null || resumen.isBlank()) {
-            resumen = "No existen servicios turisticos registrados.";
+            resumen = "No existen servicios turísticos registrados.";
         }
 
         mostrarMensaje(
-                "Servicios turisticos",
+                "Servicios turísticos",
                 resumen
         );
     }
@@ -1700,7 +1700,7 @@ public class MenuPrincipal {
 
         String codigo =
                 solicitarDato(
-                        "Ingrese el codigo del servicio:",
+                        "Ingrese el código del servicio:",
                         "Buscar servicio"
                 );
 
@@ -1711,7 +1711,7 @@ public class MenuPrincipal {
         if (codigo.isEmpty()) {
 
             mostrarError(
-                    "Debe ingresar el codigo del servicio."
+                    "Debe ingresar el código del servicio."
             );
 
             return;
@@ -1725,8 +1725,8 @@ public class MenuPrincipal {
         if (servicio == null) {
 
             mostrarMensaje(
-                    "Resultado de busqueda",
-                    "No se encontro un servicio con el codigo "
+                    "Resultado de búsqueda",
+                    "No se encontró un servicio con el código "
                             + codigo + "."
             );
 
@@ -1745,7 +1745,7 @@ public class MenuPrincipal {
     private void filtrarServiciosPorTipo() {
 
         String[] opciones = {
-                "Rutas gastronomicas",
+                "Rutas gastronómicas",
                 "Paseos lacustres",
                 "Cancelar"
         };
@@ -1764,7 +1764,7 @@ public class MenuPrincipal {
 
             case 0:
                 tipo = "ruta";
-                titulo = "Rutas gastronomicas";
+                titulo = "Rutas gastronómicas";
                 break;
 
             case 1:
@@ -1850,7 +1850,7 @@ public class MenuPrincipal {
 
         String codigo =
                 solicitarDato(
-                        "Ingrese el codigo de la reserva:",
+                        "Ingrese el código de la reserva:",
                         "Buscar reserva"
                 );
 
@@ -1861,7 +1861,7 @@ public class MenuPrincipal {
         if (codigo.isEmpty()) {
 
             mostrarError(
-                    "Debe ingresar el codigo de la reserva."
+                    "Debe ingresar el código de la reserva."
             );
 
             return;
@@ -1875,8 +1875,8 @@ public class MenuPrincipal {
         if (reserva == null) {
 
             mostrarMensaje(
-                    "Resultado de busqueda",
-                    "No se encontro una reserva con el codigo "
+                    "Resultado de búsqueda",
+                    "No se encontró una reserva con el código "
                             + codigo + "."
             );
 
@@ -2070,7 +2070,7 @@ public class MenuPrincipal {
         while (true) {
 
             String codigo = solicitarDato(
-                    "Ingrese el codigo del servicio:",
+                    "Ingrese el código del servicio:",
                     titulo
             );
 
@@ -2085,7 +2085,7 @@ public class MenuPrincipal {
 
                 mostrarError(
                         "El codigo del servicio debe tener el formato "
-                                + "SER seguido de tres a seis numeros.\n"
+                                + "SER seguido de tres a seis números.\n"
                                 + "Ejemplo: SER-001."
                 );
 
@@ -2097,7 +2097,7 @@ public class MenuPrincipal {
             )) {
 
                 mostrarError(
-                        "Ya existe un servicio con el codigo "
+                        "Ya existe un servicio con el código "
                                 + codigoNormalizado + "."
                 );
 
@@ -2161,7 +2161,7 @@ public class MenuPrincipal {
         while (true) {
 
             String telefono = solicitarDato(
-                    "Ingrese el telefono:",
+                    "Ingrese el teléfono:",
                     titulo
             );
 
@@ -2191,7 +2191,7 @@ public class MenuPrincipal {
         while (true) {
 
             String correo = solicitarDato(
-                    "Ingrese el correo electronico:",
+                    "Ingrese el correo electrónico:",
                     titulo
             );
 
@@ -2273,9 +2273,9 @@ public class MenuPrincipal {
         }
 
         Integer numero = solicitarEnteroPositivo(
-                "Ingrese el numero de la direccion:",
+                "Ingrese el numero de la dirección:",
                 titulo,
-                "El numero de la direccion"
+                "El numero de la dirección"
         );
 
         if (numero == null) {
@@ -2546,7 +2546,7 @@ public class MenuPrincipal {
         int opcion =
                 mostrarMenuVertical(
                         titulo,
-                        "Seleccione la disponibilidad:",
+                        "seleccione la disponibilidad:",
                         opciones
                 );
 

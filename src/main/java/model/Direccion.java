@@ -66,7 +66,7 @@ public class Direccion {
     public void setNumero(int numero) throws DatoInvalidoException {
         Validador.validarEnteroPositivo(
                 numero,
-                "El numero de la direccion"
+                "El numero de la dirección"
         );
 
         this.numero = numero;

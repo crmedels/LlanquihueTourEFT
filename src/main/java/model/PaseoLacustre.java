@@ -88,7 +88,7 @@ public class PaseoLacustre extends ServicioTuristico {
 
         Validador.validarTextoObligatorio(
                 nombreEmbarcacion,
-                "El nombre de la embarcacion"
+                "El nombre de la embarcación"
         );
 
         this.nombreEmbarcacion =
@@ -115,7 +115,7 @@ public class PaseoLacustre extends ServicioTuristico {
 
         Validador.validarTextoObligatorio(
                 sectorNavegacion,
-                "El sector de navegacion"
+                "El sector de navegación"
         );
 
         this.sectorNavegacion =
@@ -143,7 +143,7 @@ public class PaseoLacustre extends ServicioTuristico {
 
         Validador.validarDecimalPositivo(
                 costoEmbarcacionPorPersona,
-                "El costo de embarcacion por persona"
+                "El costo de embarcación por persona"
         );
 
         this.costoEmbarcacionPorPersona =
@@ -232,9 +232,9 @@ public class PaseoLacustre extends ServicioTuristico {
         return "=== Paseo lacustre ==="
                 + "\n" + super.toString()
                 + "\nEmbarcacion: " + nombreEmbarcacion
-                + "\nSector de navegacion: "
+                + "\nSector de navegación: "
                 + sectorNavegacion
-                + "\nCosto de embarcacion por persona: "
+                + "\nCosto de embarcación por persona: "
                 + FormateadorMoneda.formatear(
                 costoEmbarcacionPorPersona
         )

@@ -14,7 +14,7 @@ public class Main {
     /**
      * Inicia la interfaz grafica del sistema.
      *
-     * @param args argumentos de ejecucion
+     * @param args argumentos de ejecución
      */
     public static void main(String[] args) {
 

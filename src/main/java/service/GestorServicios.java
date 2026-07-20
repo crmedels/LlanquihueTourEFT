@@ -38,13 +38,13 @@ public class GestorServicios {
 
         if (servicio == null) {
             throw new DatoInvalidoException(
-                    "El servicio turistico no puede ser nulo."
+                    "El servicio turístico no puede ser nulo."
             );
         }
 
         if (existeCodigo(servicio.getCodigoServicio())) {
             throw new RegistroDuplicadoException(
-                    "Ya existe un servicio con el codigo "
+                    "Ya existe un servicio con el código "
                             + servicio.getCodigoServicio() + "."
             );
         }
@@ -114,7 +114,7 @@ public class GestorServicios {
 
         if (tipo == null || tipo.trim().isEmpty()) {
             throw new DatoInvalidoException(
-                    "El tipo de servicio no puede estar vacio."
+                    "El tipo de servicio no puede estar vacío."
             );
         }
 
@@ -167,7 +167,7 @@ public class GestorServicios {
 
         if (servicio == null) {
             throw new DatoInvalidoException(
-                    "No existe un servicio con el codigo indicado."
+                    "No existe un servicio con el código indicado."
             );
         }
 
@@ -182,7 +182,7 @@ public class GestorServicios {
     public String generarResumenServicios() {
 
         if (servicios.isEmpty()) {
-            return "No existen servicios turisticos registrados.";
+            return "No existen servicios turísticos registrados.";
         }
 
         StringBuilder resumen = new StringBuilder();

@@ -123,7 +123,7 @@ public class GestorEntidades {
 
         if (tipo == null || tipo.trim().isEmpty()) {
             throw new DatoInvalidoException(
-                    "El tipo de entidad no puede estar vacio."
+                    "El tipo de entidad no puede estar vacío."
             );
         }
 

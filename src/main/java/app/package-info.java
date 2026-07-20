@@ -1,4 +1,4 @@
 /**
- * Contiene el punto de entrada principal de la aplicacion.
+ * Contiene el punto de entrada principal de la aplicación.
  */
 package app;

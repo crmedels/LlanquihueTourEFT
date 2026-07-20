@@ -51,10 +51,10 @@ public class CargadorDatosIniciales {
      * Carga todas las entidades y servicios desde
      * los archivos almacenados en resources.
      *
-     * @param gestorEntidades gestor que recibira personas y vehiculos
-     * @param gestorServicios gestor que recibira servicios turisticos
-     * @throws IOException si algun archivo no puede ser leido
-     * @throws DatoInvalidoException si algun dato no es valido
+     * @param gestorEntidades gestor que recibirá personas y vehículos
+     * @param gestorServicios gestor que recibirá servicios turísticos
+     * @throws IOException si algún archivo no puede ser leído
+     * @throws DatoInvalidoException si algún dato no es valido
      * @throws RegistroDuplicadoException si existe un identificador repetido
      */
     public void cargarDatosIniciales(
@@ -85,10 +85,10 @@ public class CargadorDatosIniciales {
     /**
      * Carga los clientes en el gestor de entidades.
      *
-     * @param gestorEntidades gestor que recibira los clientes
-     * @throws IOException si el archivo no puede ser leido
-     * @throws DatoInvalidoException si algun dato no es valido
-     * @throws RegistroDuplicadoException si existe un codigo repetido
+     * @param gestorEntidades gestor que recibirá los clientes
+     * @throws IOException si el archivo no puede ser leído
+     * @throws DatoInvalidoException si algún dato no es valido
+     * @throws RegistroDuplicadoException si existe un código repetido
      */
     private void cargarClientes(
             GestorEntidades gestorEntidades
@@ -104,12 +104,12 @@ public class CargadorDatosIniciales {
     }
 
     /**
-     * Carga los guias en el gestor de entidades.
+     * Carga los guías en el gestor de entidades.
      *
-     * @param gestorEntidades gestor que recibira los guias
-     * @throws IOException si el archivo no puede ser leido
-     * @throws DatoInvalidoException si algun dato no es valido
-     * @throws RegistroDuplicadoException si existe un codigo repetido
+     * @param gestorEntidades gestor que recibirá los guías
+     * @throws IOException si el archivo no puede ser leído
+     * @throws DatoInvalidoException si algún dato no es valido
+     * @throws RegistroDuplicadoException si existe un código repetido
      */
     private void cargarGuias(
             GestorEntidades gestorEntidades

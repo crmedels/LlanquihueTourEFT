@@ -170,7 +170,7 @@ public class Persona {
 
         if (direccion == null) {
             throw new DatoInvalidoException(
-                    "La direccion no puede ser nula."
+                    "La dirección no puede ser nula."
             );
         }
 
@@ -195,8 +195,8 @@ public class Persona {
     public String toString() {
         return "RUT: " + rut
                 + "\nNombre: " + getNombreCompleto()
-                + "\nTelefono: " + telefono
+                + "\nTeléfono: " + telefono
                 + "\nCorreo: " + correo
-                + "\nDireccion: " + direccion;
+                + "\nDirección: " + direccion;
     }
 }

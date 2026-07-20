@@ -83,7 +83,7 @@ public class ColaboradorExterno extends Persona
 
         Validador.validarTextoObligatorio(
                 codigoColaborador,
-                "El codigo del colaborador"
+                "El código del colaborador"
         );
 
         String codigoNormalizado =
@@ -91,8 +91,8 @@ public class ColaboradorExterno extends Persona
 
         if (!codigoNormalizado.matches("COL-\\d{3,6}")) {
             throw new DatoInvalidoException(
-                    "El codigo del colaborador debe tener el formato "
-                            + "COL seguido de tres a seis numeros. "
+                    "El código del colaborador debe tener el formato "
+                            + "COL seguido de tres a seis números. "
                             + "Ejemplo: COL-001."
             );
         }
@@ -228,7 +228,7 @@ public class ColaboradorExterno extends Persona
 
         return "=== Colaborador externo ==="
                 + "\n" + super.toString()
-                + "\nCodigo: " + codigoColaborador
+                + "\nCódigo: " + codigoColaborador
                 + "\nTipo de servicio: " + tipoServicio
                 + "\nTarifa por servicio: "
                 + FormateadorMoneda.formatear(tarifaPorServicio)

@@ -45,7 +45,7 @@ public class LectorGuias {
 
         if (flujoEntrada == null) {
             throw new IOException(
-                    "No se encontro el archivo: "
+                    "No se encontró el archivo: "
                             + rutaRecurso
             );
         }
@@ -124,13 +124,13 @@ public class LectorGuias {
         int numeroDireccion =
                 Validador.convertirEntero(
                         datos[7],
-                        "El numero de la direccion"
+                        "El numero de la dirección"
                 );
 
         int aniosExperiencia =
                 Validador.convertirEntero(
                         datos[11],
-                        "Los anios de experiencia"
+                        "Los años de experiencia"
                 );
 
         double tarifaDiaria =

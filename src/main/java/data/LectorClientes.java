@@ -45,7 +45,7 @@ public class LectorClientes {
 
         if (flujoEntrada == null) {
             throw new IOException(
-                    "No se encontro el archivo: "
+                    "No se encontró el archivo: "
                             + rutaRecurso
             );
         }
@@ -124,7 +124,7 @@ public class LectorClientes {
         int numeroDireccion =
                 Validador.convertirEntero(
                         datos[7],
-                        "El numero de la direccion"
+                        "El numero de la dirección"
                 );
 
         Direccion direccion = new Direccion(

@@ -46,7 +46,7 @@ public class LectorServicios {
 
         if (flujoEntrada == null) {
             throw new IOException(
-                    "No se encontro el archivo: "
+                    "No se encontró el archivo: "
                             + rutaRecurso
             );
         }
@@ -134,7 +134,7 @@ public class LectorServicios {
         int duracionHoras =
                 Validador.convertirEntero(
                         datos[5],
-                        "La duracion en horas"
+                        "La duración en horas"
                 );
 
         int capacidadMaxima =
@@ -160,7 +160,7 @@ public class LectorServicios {
             double costoDegustacion =
                     Validador.convertirDecimal(
                             datos[10],
-                            "El costo de degustacion"
+                            "El costo de degustación"
                     );
 
             return new RutaGastronomica(
@@ -182,7 +182,7 @@ public class LectorServicios {
             double costoEmbarcacion =
                     Validador.convertirDecimal(
                             datos[10],
-                            "El costo de embarcacion"
+                            "El costo de embarcación"
                     );
 
             return new PaseoLacustre(

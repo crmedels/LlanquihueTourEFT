@@ -73,7 +73,7 @@ public class Cliente extends Persona implements Registrable {
 
         Validador.validarTextoObligatorio(
                 codigoCliente,
-                "El codigo del cliente"
+                "El código del cliente"
         );
 
         String codigoNormalizado =
@@ -81,8 +81,8 @@ public class Cliente extends Persona implements Registrable {
 
         if (!codigoNormalizado.matches("CLI-\\d{3,6}")) {
             throw new DatoInvalidoException(
-                    "El codigo del cliente debe tener el formato "
-                            + "CLI seguido de tres a seis numeros. "
+                    "El código del cliente debe tener el formato "
+                            + "CLI seguido de tres a seis números. "
                             + "Ejemplo: CLI-001."
             );
         }
@@ -149,8 +149,8 @@ public class Cliente extends Persona implements Registrable {
     public String toString() {
         return "=== Cliente ==="
                 + "\n" + super.toString()
-                + "\nCodigo: " + codigoCliente
-                + "\nPreferencia turistica: "
+                + "\nCódigo: " + codigoCliente
+                + "\nPreferencia turística: "
                 + preferenciaTuristica;
     }
 }

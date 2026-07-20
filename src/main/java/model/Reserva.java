@@ -68,7 +68,7 @@ public class Reserva implements Registrable {
 
         Validador.validarTextoObligatorio(
                 codigoReserva,
-                "El codigo de la reserva"
+                "El código de la reserva"
         );
 
         String codigoNormalizado =
@@ -76,8 +76,8 @@ public class Reserva implements Registrable {
 
         if (!codigoNormalizado.matches("RES-\\d{3,6}")) {
             throw new DatoInvalidoException(
-                    "El codigo de la reserva debe tener el formato "
-                            + "RES seguido de tres a seis numeros. "
+                    "El código de la reserva debe tener el formato "
+                            + "RES seguido de tres a seis números. "
                             + "Ejemplo: RES-001."
             );
         }
@@ -123,13 +123,13 @@ public class Reserva implements Registrable {
 
         if (servicio == null) {
             throw new DatoInvalidoException(
-                    "El servicio turistico no puede ser nulo."
+                    "El servicio turístico no puede ser nulo."
             );
         }
 
         if (!servicio.isDisponible()) {
             throw new DatoInvalidoException(
-                    "El servicio turistico seleccionado no esta disponible."
+                    "El servicio turístico seleccionado no esta disponible."
             );
         }
 
@@ -162,13 +162,13 @@ public class Reserva implements Registrable {
 
         if (guia == null) {
             throw new DatoInvalidoException(
-                    "El guia turistico no puede ser nulo."
+                    "El guia turístico no puede ser nulo."
             );
         }
 
         if (!guia.isDisponible()) {
             throw new DatoInvalidoException(
-                    "El guia turistico seleccionado no esta disponible."
+                    "El guia turístico seleccionado no esta disponible."
             );
         }
 
@@ -349,7 +349,7 @@ public class Reserva implements Registrable {
     public String mostrarResumen() {
         return codigoReserva
                 + " | Cliente: " + cliente.getNombreCompleto()
-                + " | Servicio: " + servicio.getNombre()
+                + " | servicio: " + servicio.getNombre()
                 + " | Fecha: " + fecha
                 + " | Personas: " + cantidadPersonas
                 + " | Total: "
@@ -364,10 +364,10 @@ public class Reserva implements Registrable {
     @Override
     public String toString() {
         return "=== Reserva ==="
-                + "\nCodigo: " + codigoReserva
+                + "\nCódigo: " + codigoReserva
                 + "\nCliente: " + cliente.getNombreCompleto()
                 + "\nRUT del cliente: " + cliente.getRut()
-                + "\nServicio: " + servicio.getNombre()
+                + "\nservicio: " + servicio.getNombre()
                 + "\nGuia: " + guia.getNombreCompleto()
                 + "\nVehiculo: " + vehiculo.getPatente()
                 + " - " + vehiculo.getMarca()

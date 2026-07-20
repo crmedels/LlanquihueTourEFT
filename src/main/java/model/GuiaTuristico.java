@@ -86,7 +86,7 @@ public class GuiaTuristico extends Persona implements Registrable {
 
         Validador.validarTextoObligatorio(
                 codigoGuia,
-                "El codigo del guia"
+                "El código del guia"
         );
 
         String codigoNormalizado =
@@ -94,8 +94,8 @@ public class GuiaTuristico extends Persona implements Registrable {
 
         if (!codigoNormalizado.matches("GUI-\\d{3,6}")) {
             throw new DatoInvalidoException(
-                    "El codigo del guia debe tener el formato "
-                            + "GUI seguido de tres a seis numeros. "
+                    "El código del guia debe tener el formato "
+                            + "GUI seguido de tres a seis números. "
                             + "Ejemplo: GUI-001."
             );
         }
@@ -149,7 +149,7 @@ public class GuiaTuristico extends Persona implements Registrable {
 
         Validador.validarEnteroNoNegativo(
                 aniosExperiencia,
-                "Los anios de experiencia"
+                "Los años de experiencia"
         );
 
         this.aniosExperiencia = aniosExperiencia;
@@ -255,11 +255,11 @@ public class GuiaTuristico extends Persona implements Registrable {
                 ? "Disponible"
                 : "No disponible";
 
-        return "=== Guia turistico ==="
+        return "=== Guia turístico ==="
                 + "\n" + super.toString()
-                + "\nCodigo: " + codigoGuia
+                + "\nCódigo: " + codigoGuia
                 + "\nEspecialidad: " + especialidad
-                + "\nAnios de experiencia: " + aniosExperiencia
+                + "\nAños de experiencia: " + aniosExperiencia
                 + "\nTarifa diaria: "
                 + FormateadorMoneda.formatear(tarifaDiaria)
                 + "\nEstado: " + estado;

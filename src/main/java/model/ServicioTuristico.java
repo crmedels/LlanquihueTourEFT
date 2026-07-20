@@ -67,7 +67,7 @@ public abstract class ServicioTuristico implements Registrable {
 
         Validador.validarTextoObligatorio(
                 codigoServicio,
-                "El codigo del servicio"
+                "El código del servicio"
         );
 
         String codigoNormalizado =
@@ -75,8 +75,8 @@ public abstract class ServicioTuristico implements Registrable {
 
         if (!codigoNormalizado.matches("SER-\\d{3,6}")) {
             throw new DatoInvalidoException(
-                    "El codigo del servicio debe tener el formato "
-                            + "SER seguido de tres a seis numeros. "
+                    "El código del servicio debe tener el formato "
+                            + "SER seguido de tres a seis números. "
                             + "Ejemplo: SER-001."
             );
         }
@@ -120,7 +120,7 @@ public abstract class ServicioTuristico implements Registrable {
 
         Validador.validarTextoObligatorio(
                 descripcion,
-                "La descripcion del servicio"
+                "La descripción del servicio"
         );
 
         this.descripcion = descripcion.trim();
@@ -162,7 +162,7 @@ public abstract class ServicioTuristico implements Registrable {
 
         Validador.validarEnteroPositivo(
                 duracionHoras,
-                "La duracion del servicio"
+                "La duración del servicio"
         );
 
         this.duracionHoras = duracionHoras;
@@ -285,10 +285,10 @@ public abstract class ServicioTuristico implements Registrable {
 
         return "Codigo: " + codigoServicio
                 + "\nNombre: " + nombre
-                + "\nDescripcion: " + descripcion
+                + "\nDescripción: " + descripcion
                 + "\nPrecio base: "
                 + FormateadorMoneda.formatear(precioBase)
-                + "\nDuracion: " + duracionHoras + " horas"
+                + "\nDuración: " + duracionHoras + " horas"
                 + "\nCapacidad maxima: " + capacidadMaxima
                 + "\nEstado: " + estado;
     }

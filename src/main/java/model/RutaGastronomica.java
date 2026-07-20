@@ -135,7 +135,7 @@ public class RutaGastronomica extends ServicioTuristico {
 
         Validador.validarDecimalPositivo(
                 costoDegustacionPorPersona,
-                "El costo de degustacion por persona"
+                "El costo de degustación por persona"
         );
 
         this.costoDegustacionPorPersona =
@@ -191,11 +191,11 @@ public class RutaGastronomica extends ServicioTuristico {
      */
     @Override
     public String toString() {
-        return "=== Ruta gastronomica ==="
+        return "=== Ruta gastronómica ==="
                 + "\n" + super.toString()
                 + "\nTipo de cocina: " + tipoCocina
                 + "\nCantidad de paradas: " + cantidadParadas
-                + "\nCosto de degustacion por persona: "
+                + "\nCosto de degustación por persona: "
                 + FormateadorMoneda.formatear(
                 costoDegustacionPorPersona
         );
